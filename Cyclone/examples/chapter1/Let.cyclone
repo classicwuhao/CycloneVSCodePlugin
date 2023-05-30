@@ -1,0 +1,47 @@
+/**
+ * Demonstrate how to use let expression to store path conditions.
+ *
+ */
+
+graph False{
+
+    abstract start node S0 {}
+    abstract node S1 {}
+    abstract node S2 {}
+    abstract node S3 {}
+    abstract node S4 {}
+
+    edge {S0->S1}
+    edge {S0->S2}
+    edge {S0->S3}
+    edge {S0->S4}
+
+    edge {S1->S0}
+    edge {S1->S2}
+    edge {S1->S3}
+    edge {S1->S4}
+
+    edge {S2->S0}
+    edge {S2->S1}
+    edge {S2->S3}
+    edge {S2->S4}
+
+    edge {S3->S0}
+    edge {S3->S1}
+    edge {S3->S2}
+    edge {S3->S4}
+
+    edge {S4->S0}
+    edge {S4->S1}
+    edge {S4->S2}
+    edge {S4->S3}
+
+    goal{
+        let cond1=true;
+        cond1=false;
+        let cond2=true;
+
+        check for 10 condition (cond1 && cond2) reach (S0)
+    }
+
+}

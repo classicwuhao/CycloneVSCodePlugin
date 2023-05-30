@@ -1,0 +1,30 @@
+const { stdout } = require('process');
+const vscode = require('vscode');
+const fs = require("fs");
+const path = require('path');
+function activate(context) {
+	let out = vscode.window.createOutputChannel("Cyclone");
+	let disposable = vscode.commands.registerCommand('extension.runFile', function () {
+		var exec = require('child_process').exec, child;
+		const editor = vscode.window.activeTextEditor;
+		const extension = vscode.extensions.getExtension("alesiatratsiakova.cyclone");
+		const lib_path = path.join(extension.extensionPath, "Cyclone");
+		const ext_path = path.join(lib_path, "cyclone.jar");
+		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" "' + editor.document.fileName + '"',
+		function (error, stdout, stderr){
+			out.appendLine(stdout);
+			out.appendLine(stderr);
+			console.log('stdout: ' + stdout);
+			console.log('stderr: ' + stderr);
+			if(error !== null){
+  				console.log('exec error: ' + error);
+			}
+		});  
+	});
+	context.subscriptions.push(disposable);
+}
+function deactivate() {}
+module.exports = {
+	activate,
+	deactivate
+}
