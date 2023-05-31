@@ -1,15 +1,15 @@
 {
-  "name": "cyclone",
-  "publisher": "AlesiaTratsiakova",
+  "name": "Cyclone",
+  "publisher": "Hao Wu",
   "displayName": "Cyclone",
-  "description": "Cyclone support for Visual Studio Code",
+  "description": "Cyclone Plugin for Visual Studio Code",
   "icon": "icon.png",
   "version": "0.0.8",
   "public": false,
-  "homepage": "https://github.com/AlesiaT/cs4602",
+  "homepage": "https://github.com/classicwuhao/CycloneVSCodePlugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AlesiaT/cs4602"
+    "url": "https://github.com/classicwuhao/CycloneVSCodePlugin"
   },
   "engines": {
     "vscode": "^1.72.0"

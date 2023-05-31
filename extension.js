@@ -10,6 +10,32 @@ function activate(context) {
 		const extension = vscode.extensions.getExtension("alesiatratsiakova.cyclone");
 		const lib_path = path.join(extension.extensionPath, "Cyclone");
 		const ext_path = path.join(lib_path, "cyclone.jar");
+		
+		let os = navigator.userAgent;
+		if (os.search('Linux')!==-1 && os.search('X11')!==-1)
+			exec ('LD_LIBRARY_PATH='+lib_path,(error,stdout,stderr)=>{
+				if (error){
+					console.error('error: ${error.message}');
+					return;
+				}
+				if (stderr){
+					console.error('stderr: ${stderr}');
+					return;
+				}
+			});
+		
+		if (os.search('Mac')!==-1)
+			exec ('DYLD_LIBRARY_PATH='+lib_path,(error,stdout,stderr)=>{
+				if (error){
+					console.error('error: ${error.message}');
+					return;
+				}
+				if (stderr){
+					console.error('stderr: ${stderr}');
+					return;
+				}
+			});
+
 		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" "' + editor.document.fileName + '"',
 		function (error, stdout, stderr){
 			out.appendLine(stdout);
