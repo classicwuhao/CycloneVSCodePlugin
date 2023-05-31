@@ -11,8 +11,9 @@ function activate(context) {
 		const lib_path = path.join(extension.extensionPath, "Cyclone");
 		const ext_path = path.join(lib_path, "cyclone.jar");
 		
-		let os = navigator.userAgent;
-		if (os.search('Linux')!==-1 && os.search('X11')!==-1)
+		const os = require ('os');
+		const platform = os.platform();
+		if (platform=='linux')
 			exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
 					console.error('error: ${error.message}');
@@ -24,7 +25,7 @@ function activate(context) {
 				}
 			});
 		
-		if (os.search('Mac')!==-1)
+		if (platform=='darwin')
 			exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
 					console.error('error: ${error.message}');
