@@ -6,7 +6,7 @@ const os = require ('os');
 
 function activate(context) {
 	let out = vscode.window.createOutputChannel("Cyclone");
-	let disposable = vscode.commands.registerCommand('extension.runFile', function () {
+	let disposable = vscode.commands.registerCommand('cyclone.check', function () {
 		var exec = require('child_process').exec, child;
 		const editor = vscode.window.activeTextEditor;
 		const extension = vscode.extensions.getExtension("HaoWu.Cyclone");

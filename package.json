@@ -42,18 +42,41 @@
       }
     ],
     "commands": [{
-      "command": "extension.runFile",
-      "title": "Run Cyclone File",
+      "command": "cyclone.check",
+      "title": "Check This Cyclone Spec",
       "category": "Cyclone"
-    }],
+    },
+    {
+      "command" : "cyclone.version",
+      "title" : "Version Info",
+      "category" : "Cyclone"
+    }
+    ],
     "menus": {
       "editor/context": [
         {
-          "command": "extension.runFile",
+          "submenu" : "Cyclone.Submenu",
+          "group" : "Cyclone.Menu"
+        }
+      ],
+      "Cyclone.Submenu" : [
+        {
+          "command" : "cyclone.check",
+          "group" : "Cyclone.CheckMenu",
           "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group" : "Cyclone.InfoMenu",
+          "command" : "cyclone.version"
         }
       ]
+    },
+    "submenus" : [{
+      "label" : "Cyclone",
+      "id" : "Cyclone.Submenu",
+      "icon" : "./icon.png"
     }
+  ]
   },
   "devDependencies": {
     "vscode": "^1.1.37"
