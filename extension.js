@@ -23,6 +23,7 @@ function activate(context) {
 					console.error('stderr: ${stderr}');
 					return;
 				}
+				console.log('set path.');
 			});
 		
 		if (platform=='darwin')
