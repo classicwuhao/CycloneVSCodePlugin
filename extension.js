@@ -15,7 +15,7 @@ function activate(context) {
 
 		const platform = os.platform();		
 		if (platform=='linux'){
-			/*p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
+			p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
 					console.error('error: ${error.message}');
 					return;
@@ -25,8 +25,8 @@ function activate(context) {
 					return;
 				}
 				
-			});*/
-			out.appendLine('linux: set path.');
+			});
+			//out.appendLine('linux: set path.');
 		}
 		
 		/*if (platform=='darwin')
@@ -41,7 +41,7 @@ function activate(context) {
 				}
 			});*/
 
-		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" "' + editor.document.fileName + '"',
+		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
 		function (error, stdout, stderr){
 			out.appendLine(stdout);
 			out.appendLine(stderr);
