@@ -13,8 +13,8 @@ function activate(context) {
 		
 		const os = require ('os');
 		const platform = os.platform();
-		if (platform=='linux')
-			exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
+		if (platform=='linux'){
+			p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
 					console.error('error: ${error.message}');
 					return;
@@ -23,8 +23,10 @@ function activate(context) {
 					console.error('stderr: ${stderr}');
 					return;
 				}
-				console.log('set path.');
+				
 			});
+			out.appendLine('linux: set path.');
+		}
 		
 		if (platform=='darwin')
 			exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
