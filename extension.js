@@ -9,10 +9,10 @@ function activate(context) {
 	let disposable = vscode.commands.registerCommand('extension.runFile', function () {
 		var exec = require('child_process').exec, child;
 		const editor = vscode.window.activeTextEditor;
-		const extension = vscode.extensions.getExtension("alesiatratsiakova.cyclone");
+		const extension = vscode.extensions.getExtension("HaoWu.Cyclone");
 		const lib_path = path.join(extension.extensionPath, "Cyclone");
 		const ext_path = path.join(lib_path, "cyclone.jar");
-		
+
 		const platform = os.platform();		
 		if (platform=='linux'){
 			/*p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
