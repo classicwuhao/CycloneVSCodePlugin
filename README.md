@@ -16,4 +16,8 @@ How to install the extension and make it work:
 
 To-do list:
  - [ ] Fix lib path issue for Linux and MacOs.
- - [ ] Add features that are recently added to Cyclone.
+ - [ ] Add a menu to show trace files.
+ - [ ] Add a menu to clean up generated trace files.
+ - [ ] Add a menu to check version number.
+ 
+

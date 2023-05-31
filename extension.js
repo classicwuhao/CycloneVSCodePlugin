@@ -26,10 +26,9 @@ function activate(context) {
 				}
 				
 			});
-			//out.appendLine('linux: set path.');
 		}
 		
-		/*if (platform=='darwin')
+		if (platform=='darwin')
 			exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
 					console.error('error: ${error.message}');
@@ -39,10 +38,11 @@ function activate(context) {
 					console.error('stderr: ${stderr}');
 					return;
 				}
-			});*/
+			});
 
 		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
 		function (error, stdout, stderr){
+			out.clear();
 			out.appendLine(stdout);
 			out.appendLine(stderr);
 			console.log('stdout: ' + stdout);
