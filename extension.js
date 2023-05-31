@@ -13,7 +13,7 @@ function activate(context) {
 		
 		let os = navigator.userAgent;
 		if (os.search('Linux')!==-1 && os.search('X11')!==-1)
-			exec ('LD_LIBRARY_PATH='+lib_path,(error,stdout,stderr)=>{
+			exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
 					console.error('error: ${error.message}');
 					return;
@@ -25,7 +25,7 @@ function activate(context) {
 			});
 		
 		if (os.search('Mac')!==-1)
-			exec ('DYLD_LIBRARY_PATH='+lib_path,(error,stdout,stderr)=>{
+			exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
 					console.error('error: ${error.message}');
 					return;
