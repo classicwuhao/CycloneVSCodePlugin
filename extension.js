@@ -2,6 +2,8 @@ const { stdout } = require('process');
 const vscode = require('vscode');
 const fs = require("fs");
 const path = require('path');
+const os = require ('os');
+
 function activate(context) {
 	let out = vscode.window.createOutputChannel("Cyclone");
 	let disposable = vscode.commands.registerCommand('extension.runFile', function () {
@@ -11,8 +13,7 @@ function activate(context) {
 		const lib_path = path.join(extension.extensionPath, "Cyclone");
 		const ext_path = path.join(lib_path, "cyclone.jar");
 		
-		const os = require ('os');
-		const platform = os.platform();
+		const platform = os.platform();		
 		if (platform=='linux'){
 			/*p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 				if (error){
