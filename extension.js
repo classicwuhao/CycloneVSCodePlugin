@@ -7,7 +7,8 @@ const editor = vscode.window.activeTextEditor;
 const extension = vscode.extensions.getExtension("HaoWu.Cyclone");
 const lib_path = path.join(extension.extensionPath, "Cyclone");
 const ext_path = path.join(lib_path, "cyclone.jar");
-
+cmd_ver='';
+cmd_java_ver='java -jar cyclone.jar --version';
 function activate(context) {
 	let out = vscode.window.createOutputChannel("Cyclone");
 	initialize();
@@ -37,7 +38,7 @@ function registerCycloneCheck(context, out){
 function registerCycloneInfo(context, out){
 	let disposable = vscode.commands.registerCommand('cyclone.version', function () {
 		var exec = require('child_process').exec, child;
-		child = exec('cd '+lib_path+' && '+'java -jar cyclone.jar --version',
+		child = exec(cmd_ver,
 		function (error, stdout, stderr){
 			out.clear();
 			out.appendLine(stdout);
@@ -56,6 +57,7 @@ function initialize(){
 	sys=checkOS();
 	var exec = require('child_process').exec;
 	if (sys=='Linux'){
+		cmd_ver='cd '+lib_path+' && '+' export LD_LIBRARY_PATH=.'+' && '+cmd_java_ver;
 		p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 			if (error){
 				console.error('error: ${error.message}');
@@ -66,9 +68,11 @@ function initialize(){
 				return;
 			}
 		});
+		return;
 	}
 	
-	if (sys=='MacOS')
+	if (sys=='MacOS'){
+		cmd_ver='cd '+lib_path+' && '+' export DYLD_LIBRARY_PATH=.'+' && '+cmd_java_ver;
 		exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 			if (error){
 				console.error('error: ${error.message}');
@@ -79,6 +83,10 @@ function initialize(){
 				return;
 			}
 		});
+		return;
+	}
+
+	cmd_ver='cd '+lib_path+' && ' + cmd_java_ver;
 }
 
 function checkOS(){
