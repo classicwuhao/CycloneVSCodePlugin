@@ -47,6 +47,11 @@
       "category": "Cyclone"
     },
     {
+      "command": "cyclone.trace",
+      "title": "Open Trace File",
+      "category": "Cyclone"
+    },
+    {
       "command" : "cyclone.version",
       "title" : "Version Info",
       "category" : "Cyclone"
