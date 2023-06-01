@@ -3,22 +3,22 @@ const vscode = require('vscode');
 const fs = require("fs");
 const path = require('path');
 const os = require ('os');
-const editor = vscode.window.activeTextEditor;
 const extension = vscode.extensions.getExtension("HaoWu.Cyclone");
 const lib_path = path.join(extension.extensionPath, "Cyclone");
 const ext_path = path.join(lib_path, "cyclone.jar");
 cmd_ver='';
 cmd_java_ver='java -jar cyclone.jar --version';
 function activate(context) {
-	let out = vscode.window.createOutputChannel("Cyclone");
 	initialize();
-	registerCycloneCheck(context, out);
-	registerCycloneInfo(context, out);
+	let out = vscode.window.createOutputChannel("Cyclone");
+	registerCycloneCheck(context,out);
+	registerCycloneInfo(context,out);
 }
 
-function registerCycloneCheck(context, out){
+function registerCycloneCheck(context,out){
 	let disposable = vscode.commands.registerCommand('cyclone.check', function () {
 		var exec = require('child_process').exec, child;
+		const editor = vscode.window.activeTextEditor;
 		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
 		function (error, stdout, stderr){
 			out.clear();
