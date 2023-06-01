@@ -73,8 +73,7 @@
     },
     "submenus" : [{
       "label" : "Cyclone",
-      "id" : "Cyclone.Submenu",
-      "icon" : "./icon.png"
+      "id" : "Cyclone.Submenu"
     }
   ]
   },
