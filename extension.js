@@ -33,10 +33,11 @@ function registerCycloneCheck(context, out){
 	context.subscriptions.push(disposable);
 }
 
+//child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --version',
 function registerCycloneInfo(context, out){
 	let disposable = vscode.commands.registerCommand('cyclone.version', function () {
 		var exec = require('child_process').exec, child;
-		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --version',
+		child = exec('cd '+lib_path+' && '+'java -jar cyclone.jar --version',
 		function (error, stdout, stderr){
 			out.clear();
 			out.appendLine(stdout);
