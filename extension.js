@@ -18,10 +18,6 @@ function activate(context) {
 function registerCycloneCheck(context, out){
 	let disposable = vscode.commands.registerCommand('cyclone.check', function () {
 		var exec = require('child_process').exec, child;
-		/*const editor = vscode.window.activeTextEditor;
-		const extension = vscode.extensions.getExtension("HaoWu.Cyclone");
-		const lib_path = path.join(extension.extensionPath, "Cyclone");
-		const ext_path = path.join(lib_path, "cyclone.jar");*/
 		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
 		function (error, stdout, stderr){
 			out.clear();
@@ -43,6 +39,7 @@ function registerCycloneInfo(context, out){
 
 function initialize(){
 	sys=checkOS();
+	var exec = require('child_process').exec;
 	if (sys=='Linux'){
 		p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 			if (error){
