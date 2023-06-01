@@ -12,7 +12,7 @@ function activate(context) {
 	let out = vscode.window.createOutputChannel("Cyclone");
 	initialize();
 	registerCycloneCheck(context, out);
-
+	registerCycloneInfo(context, out);
 }
 
 function registerCycloneCheck(context, out){
@@ -34,7 +34,21 @@ function registerCycloneCheck(context, out){
 }
 
 function registerCycloneInfo(context, out){
-
+	let disposable = vscode.commands.registerCommand('cyclone.version', function () {
+		var exec = require('child_process').exec, child;
+		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --version',
+		function (error, stdout, stderr){
+			out.clear();
+			out.appendLine(stdout);
+			out.appendLine(stderr);
+			console.log('stdout: ' + stdout);
+			console.log('stderr: ' + stderr);
+			if(error !== null){
+  				console.log('exec error: ' + error);
+			}
+		});  
+	});
+	context.subscriptions.push(disposable);
 }
 
 function initialize(){
