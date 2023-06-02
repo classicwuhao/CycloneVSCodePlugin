@@ -48,7 +48,7 @@
     },
     {
       "command": "cyclone.trace",
-      "title": "Open Trace File",
+      "title": "Show Trace File",
       "category": "Cyclone"
     },
     {
@@ -67,7 +67,12 @@
       "Cyclone.Submenu" : [
         {
           "command" : "cyclone.check",
-          "group" : "Cyclone.CheckMenu",
+          "group" : "Cyclone.MainItem",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "command" : "cyclone.trace",
+          "group" : "Cyclone.MainItem",
           "when": "resourceExtname == .cyclone"
         },
         {
