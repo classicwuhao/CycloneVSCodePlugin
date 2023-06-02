@@ -16,7 +16,7 @@ function activate(context) {
 }
 
 function registerCycloneCheck(context,out){
-	let disposable = vscode.commands.registerCommand('cyclone.check', function () {
+	let disposable = vscode.commands.registerCommand('cyclone.m1.check', function () {
 		var exec = require('child_process').exec, child;
 		const editor = vscode.window.activeTextEditor;
 		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
@@ -36,7 +36,7 @@ function registerCycloneCheck(context,out){
 
 //child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --version',
 function registerCycloneInfo(context, out){
-	let disposable = vscode.commands.registerCommand('cyclone.version', function () {
+	let disposable = vscode.commands.registerCommand('cyclone.m4.version', function () {
 		var exec = require('child_process').exec, child;
 		child = exec(cmd_ver,
 		function (error, stdout, stderr){

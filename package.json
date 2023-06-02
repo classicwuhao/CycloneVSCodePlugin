@@ -42,17 +42,22 @@
       }
     ],
     "commands": [{
-      "command": "cyclone.check",
+      "command": "cyclone.m1.check",
       "title": "Check This Cyclone Spec",
       "category": "Cyclone"
     },
     {
-      "command": "cyclone.trace",
+      "command": "cyclone.m2.trace",
       "title": "Show Trace File",
       "category": "Cyclone"
     },
     {
-      "command" : "cyclone.version",
+      "command": "cyclone.m3.trace",
+      "title": "Clean Trace File",
+      "category": "Cyclone"
+    },
+    {
+      "command" : "cyclone.m4.version",
       "title" : "Version Info",
       "category" : "Cyclone"
     }
@@ -66,18 +71,23 @@
       ],
       "Cyclone.Submenu" : [
         {
-          "command" : "cyclone.check",
+          "command" : "cyclone.m1.check",
           "group" : "Cyclone.MainItem",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command" : "cyclone.trace",
+          "command" : "cyclone.m2.trace",
           "group" : "Cyclone.MainItem",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "group" : "Cyclone.InfoMenu",
-          "command" : "cyclone.version"
+          "command" : "cyclone.m3.trace",
+          "group" : "Cyclone.MainItem",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "command" : "cyclone.m4.version",
+          "group" : "Cyclone.MenuInfo"
         }
       ]
     },
