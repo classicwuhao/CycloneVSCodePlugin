@@ -52,7 +52,7 @@
       "category": "Cyclone"
     },
     {
-      "command": "cyclone.m3.trace",
+      "command": "cyclone.m3.clean",
       "title": "Clean Trace File",
       "category": "Cyclone"
     },
@@ -81,7 +81,7 @@
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command" : "cyclone.m3.trace",
+          "command" : "cyclone.m3.clean",
           "group" : "Cyclone.MainItem",
           "when": "resourceExtname == .cyclone"
         },
