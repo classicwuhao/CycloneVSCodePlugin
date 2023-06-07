@@ -1,5 +1,4 @@
 How to install the extension and make it work:
-0. If you have "cs4602" entension installed, uninstaill it and reload vs code.
 1. Download "Cyclone-0.0.8.vsix" file from this repo.
 2. Open VSCode.
 3. Open "Extensions" panel (CTRL + SHIFT + X).
