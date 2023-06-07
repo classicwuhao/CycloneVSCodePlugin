@@ -8,8 +8,8 @@ How to install the extension and make it work:
 7. Wait until a notification appears.
 8. Click on "Reload now" button.
 9. Open any .cyclone file.
-10. Press CTRL + SHIFT + P keys and choose "Cyclone: Run Cyclone File" command. Or open context menu and pick "Run Cyclone File" command.
-11. Open "Output" pane.
+10. Right click your source code editor and choose menu `Cyclone -> Check This Cyclone Spec.`
+11. Open "Output" panel.
 12. Open "Cyclone" channel.
 13. Output should be there.
 
