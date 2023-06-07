@@ -8,6 +8,7 @@ const lib_path = path.join(extension.extensionPath, "Cyclone");
 const ext_path = path.join(lib_path, "cyclone.jar");
 cmd_ver='';
 cmd_java_ver='java -jar cyclone.jar --version';
+cmd_cyclone='';
 function activate(context) {
 	initialize();
 	let out = vscode.window.createOutputChannel("Cyclone");
@@ -19,17 +20,32 @@ function registerCycloneCheck(context,out){
 	let disposable = vscode.commands.registerCommand('cyclone.m1.check', function () {
 		var exec = require('child_process').exec, child;
 		const editor = vscode.window.activeTextEditor;
-		child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
-		function (error, stdout, stderr){
-			out.clear();
-			out.appendLine(stdout);
-			out.appendLine(stderr);
-			console.log('stdout: ' + stdout);
-			console.log('stderr: ' + stderr);
-			if(error !== null){
-  				console.log('exec error: ' + error);
-			}
-		});  
+		if (checkOS=='MacOS'){
+			child = exec('cd ~ && java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
+			function (error, stdout, stderr){
+				out.clear();
+				out.appendLine(stdout);
+				out.appendLine(stderr);
+				console.log('stdout: ' + stdout);
+				console.log('stderr: ' + stderr);
+				if(error !== null){
+  					console.log('exec error: ' + error);
+				}
+			});
+		}
+		else {
+			child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
+			function (error, stdout, stderr){
+				out.clear();
+				out.appendLine(stdout);
+				out.appendLine(stderr);
+				console.log('stdout: ' + stdout);
+				console.log('stderr: ' + stderr);
+				if(error !== null){
+  					console.log('exec error: ' + error);
+				}
+			});
+		}
 	});
 	context.subscriptions.push(disposable);
 }
@@ -56,6 +72,7 @@ function registerCycloneInfo(context, out){
 function initialize(){
 	sys=checkOS();
 	var exec = require('child_process').exec;
+
 	if (sys=='Linux'){
 		cmd_ver='cd '+lib_path+' && '+' export LD_LIBRARY_PATH=.'+' && '+cmd_java_ver;
 		p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
