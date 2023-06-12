@@ -20,7 +20,7 @@ function registerCycloneCheck(context,out){
 	let disposable = vscode.commands.registerCommand('cyclone.m1.check', function () {
 		var exec = require('child_process').exec, child;
 		const editor = vscode.window.activeTextEditor;
-		if (checkOS=='MacOS'){
+		if (checkOS()=='MacOS'){
 			child = exec('cd ~ && java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
 			function (error, stdout, stderr){
 				out.clear();
