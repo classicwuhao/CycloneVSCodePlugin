@@ -14,8 +14,7 @@
   "engines": {
     "vscode": "^1.72.0"
   },
-  "activationEvents": [
-  ],
+  "activationEvents": [],
   "main": "./extension.js",
   "categories": [
     "Programming Languages"
@@ -41,61 +40,73 @@
         "path": "./syntaxes/cyclone.tmLanguage"
       }
     ],
-    "commands": [{
-      "command": "cyclone.m1.check",
-      "title": "Check This Cyclone Spec",
-      "category": "Cyclone"
-    },
-    {
-      "command": "cyclone.m2.trace",
-      "title": "Show Trace File",
-      "category": "Cyclone"
-    },
-    {
-      "command": "cyclone.m3.clean",
-      "title": "Clean Trace File",
-      "category": "Cyclone"
-    },
-    {
-      "command" : "cyclone.m4.version",
-      "title" : "Version Info",
-      "category" : "Cyclone"
-    }
+    "commands": [
+      {
+        "command": "cyclone.m1.check",
+        "title": "Check This Cyclone Spec",
+        "category": "Cyclone"
+      },
+      {
+        "command": "cyclone.m2.trace",
+        "title": "Show Trace File",
+        "category": "Cyclone"
+      },
+      {
+        "command": "cyclone.m3.clean",
+        "title": "Clean Trace File",
+        "category": "Cyclone"
+      },
+      {
+        "command": "cyclone.m4.cleanAll",
+        "title": "Clean All Trace Files",
+        "category": "Cyclone"
+      },
+      {
+        "command": "cyclone.m5.version",
+        "title": "Version Info",
+        "category": "Cyclone"
+      }
     ],
     "menus": {
       "editor/context": [
         {
-          "submenu" : "Cyclone.Submenu",
-          "group" : "Cyclone.Menu"
+          "submenu": "Cyclone.Submenu",
+          "group": "Cyclone.Menu"
         }
       ],
-      "Cyclone.Submenu" : [
+      "Cyclone.Submenu": [
         {
-          "command" : "cyclone.m1.check",
-          "group" : "Cyclone.MainItem",
+          "command": "cyclone.m1.check",
+          "group": "Cyclone.MainItem",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command" : "cyclone.m2.trace",
-          "group" : "Cyclone.MainItem",
+          "command": "cyclone.m2.trace",
+          "group": "Cyclone.MainItem",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command" : "cyclone.m3.clean",
-          "group" : "Cyclone.MainItem",
+          "command": "cyclone.m3.clean",
+          "group": "Cyclone.MainItem",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command" : "cyclone.m4.version",
-          "group" : "Cyclone.MenuInfo"
+          "command": "cyclone.m4.cleanAll",
+          "group": "Cyclone.MainItem",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "command": "cyclone.m5.version",
+          "group": "Cyclone.MenuInfo"
         }
       ]
     },
-    "submenus" : [{
-      "label" : "Cyclone",
-      "id" : "Cyclone.Submenu"
-    }
-  ]
+    "submenus": [
+      {
+        "label": "Cyclone",
+        "id": "Cyclone.Submenu"
+      }
+    ]
   },
   "devDependencies": {
     "vscode": "^1.1.37"
