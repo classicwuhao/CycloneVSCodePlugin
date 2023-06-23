@@ -20,6 +20,24 @@
     "Programming Languages"
   ],
   "contributes": {
+    "configuration": {
+      "title": "Cyclone",
+      "properties": {
+        "check.Timeout": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 7200,
+          "default": 10,
+          "description": "Time before cancellation when checking specifications (in seconds)"
+        },
+        "graphicTrace.GraphViz": {
+          "type": "boolean",
+          "default": false,
+          "format": "url",
+          "markdownDescription": "Generate png trace. Please note that you need to install Graphviz for this functionality. To install Graphviz: `https://graphviz.org/download/` "
+        }
+      }
+    },
     "languages": [
       {
         "id": "cyclone",
@@ -30,7 +48,11 @@
         "extensions": [
           ".cyclone"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icon.png",
+          "dark": "./icon.png"
+        }
       }
     ],
     "grammars": [
@@ -52,6 +74,11 @@
         "category": "Cyclone"
       },
       {
+        "command": "cyclone.m8.pngTrace",
+        "title": "Show Trace File (Graphic)",
+        "category": "Cyclone"
+      },
+      {
         "command": "cyclone.m3.clean",
         "title": "Clean Trace File",
         "category": "Cyclone"
@@ -65,6 +92,16 @@
         "command": "cyclone.m5.version",
         "title": "Version Info",
         "category": "Cyclone"
+      },
+      {
+        "command": "cyclone.m6.settings",
+        "title": "Settings",
+        "category": "Cyclone"
+      },
+      {
+        "command": "cyclone.m7.examples",
+        "title": "Load example...",
+        "category": "Cyclone"
       }
     ],
     "menus": {
@@ -77,27 +114,40 @@
       "Cyclone.Submenu": [
         {
           "command": "cyclone.m1.check",
-          "group": "Cyclone.MainItem",
+          "group": "1.Cyclone.MainItem@1", 
           "when": "resourceExtname == .cyclone"
         },
         {
           "command": "cyclone.m2.trace",
-          "group": "Cyclone.MainItem",
+          "group": "1.Cyclone.MainItem@2",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "command": "cyclone.m8.pngTrace",
+          "group": "1.Cyclone.MainItem@3",
           "when": "resourceExtname == .cyclone"
         },
         {
           "command": "cyclone.m3.clean",
-          "group": "Cyclone.MainItem",
+          "group": "1.Cyclone.MainItem@4",
           "when": "resourceExtname == .cyclone"
         },
         {
           "command": "cyclone.m4.cleanAll",
-          "group": "Cyclone.MainItem",
+          "group": "1.Cyclone.MainItem@5", 
           "when": "resourceExtname == .cyclone"
         },
         {
+          "command": "cyclone.m7.examples",
+          "group": "2.Cyclone.Examples"
+        },
+        {
           "command": "cyclone.m5.version",
-          "group": "Cyclone.MenuInfo"
+          "group": "3.Cyclone.MenuInfo"
+        },
+        {
+          "command": "cyclone.m6.settings",
+          "group": "3.Cyclone.MenuInfo"
         }
       ]
     },
