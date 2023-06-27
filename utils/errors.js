@@ -79,7 +79,7 @@ function highlightErrors(stderr, editor){
 }
 /**
 * 
-* @param {Int8Array} pos Array containing : [line, start position, end position, message] of the error
+* @param {(string|number)[]} pos Array containing : [line, start position, end position, message] of the error
 * @returns decoration to apply
 */
 function getDecorationFromPos(pos){
@@ -124,7 +124,7 @@ function getErrorPos(stderr, excludeMisleading){
     let res = [];
     res.push(parseInt(posMatch[2]) - 1); // line
     res.push(parseInt(posMatch[3])); // Start pos
-    res.push(parseInt(posMatch[3]) + parseInt(posMatch[1].length)); // Start pos + length of symbol
+    res.push(parseInt(posMatch[3]) + posMatch[1].length); // Start pos + length of symbol
     
     if (excludeMisleading && (posMatch[4].includes("set null") || posMatch[4].includes("EOF"))){
         res.push("");

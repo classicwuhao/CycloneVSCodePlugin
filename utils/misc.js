@@ -84,6 +84,16 @@ async function showNotification( message, timeout = 5000 ) {
         })
     }
 
+    function checkGraphviz() {
+        var exec = require('child_process').exec;
+        exec("dot -V", 
+			function (error, stdout, stderr){
+                // Can't rely on stderr because Graphviz displays it's version on stderr output
+				if (error){
+					vscode.window.showWarningMessage("It seems that GraphViz is not installed. Dot file will be generated but you won't be able to convert it into png.")
+				}
+			});
+    }
     module.exports = {
-        showNotification, sleep, checkJavaVersion, checkOS
+        showNotification, sleep, checkJavaVersion, checkOS, checkGraphviz
     }

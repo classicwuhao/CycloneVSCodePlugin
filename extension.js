@@ -2,7 +2,7 @@ const { getTraceDirPath, getTraceFilePath, getCurrFilePath, getDotFilePath, getP
 const {highlightErrors, displayWarningAndGenerationError, disposeHighlights} = require("./utils/errors")
 const {quickPickDir, loadFile} = require("./utils/quickPicks");
 const {modifyForPngTrace, rollbackFile} = require("./utils/editFile");
-const {checkJavaVersion, checkOS, showNotification, sleep} = require("./utils/misc");
+const {checkJavaVersion, checkOS, showNotification, sleep, checkGraphviz} = require("./utils/misc");
 
 const { stdout } = require('process');
 const vscode = require('vscode');
@@ -18,8 +18,10 @@ var cmd_cyclone='';
 // Both cmd are changed for windows in initialize()
 var rmCmd = "rm ";
 var rmDirCmd = "rm -r ";
-const commandId = "vscode-examples.undo";
+const cancelCommandId = "cyclone.cancelCheck";
 var customCancellationToken = null;
+var myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+var keepChild = false; // Global var needed for cancellation token
 
 
 
@@ -34,22 +36,25 @@ function activate(context) {
 	registerCycloneCleanAllTrace(context, out);
 	registerCycloneSettings(context, out);
 	registerCycloneExamples(context, out);
+	registerCycloneSwitchTraceMode(context, out);
+	initTraceStatusBar(context.subscriptions);
 }
 
 function registerCycloneCheck(context,out){
-	let disposable = vscode.commands.registerCommand('cyclone.m1.check', function () {
+	let disposable = vscode.commands.registerCommand('cyclone.check', function () {
+		// Prevent 2 checks from being run at the same time.
+		vscode.commands.executeCommand(cancelCommandId, false);
+
 		var exec = require('child_process').exec, child;
 		let currentFilePath = getCurrFilePath();
 		let currentDirPath = path.dirname(currentFilePath);
-		let pngTraceWanted = vscode.workspace.getConfiguration().get("graphicTrace.GraphViz");
+		let pngTraceWanted = vscode.workspace.getConfiguration().get("Trace.generateGraphicTrace");
+		
 		if (pngTraceWanted){
-			let checkGraphViz = exec("dot -version", 
-			function (error, stdout, stderr){
-				if (error || stderr !== ""){
-					vscode.window.showWarningMessage("It seems that GraphViz is not installed. Dot file will be generated but you won't be able to convert it into png.")
-				}
-			});
+			checkGraphviz();
+			// Modify the file to add png output option
 			if (!modifyForPngTrace(currentFilePath)){
+				// If no option-trace is false, disable png generation
 				pngTraceWanted = false;
 			}
 		}
@@ -66,10 +71,11 @@ function registerCycloneCheck(context,out){
 		child = exec('cd '+currentDirPath+ ' && java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
 		{
 			timeout: vscode.workspace.getConfiguration().get("check.Timeout")*1000, // Convert into s
-			killSignal:"SIGKILL" // Needed to distinguish with user cancellation
+			killSignal:"SIGTERM" // Needed to distinguish with user cancellation
 		},
 		function (error, stdout, stderr){
-			vscode.commands.executeCommand("vscode-examples.undo");
+			// Remove added line before getting error pos
+			pngTraceWanted ? rollbackFile(currentFilePath) : '';
 			out.clear();
 			let date = new Date();
 			out.appendLine(`[${date.toLocaleString()}]: `+stdout);
@@ -82,8 +88,11 @@ function registerCycloneCheck(context,out){
 			// Handle warning and generation errors
 			displayWarningAndGenerationError(stdout, stderr);
 			
-			if (stderr !== ''){ // Apply highlights if needed
+			if (stderr !== ''){ 
+				// Apply highlights if needed
 				highlightErrors(stderr, editor);
+				// Remove the timer and show warning msg
+				vscode.commands.executeCommand(cancelCommandId, true);
 				vscode.window.showErrorMessage("An error occurred, abort checking.");
 			}
 			
@@ -91,12 +100,12 @@ function registerCycloneCheck(context,out){
 				console.log('exec error: ' + error);
 				// Specify the error message according to the problem
 				if (error.killed){
-					// Each killSignal was linked to a certain action
+					// Each killSignal is linked to a certain problem/user cancellation/time out
 					switch (error.signal) {
-						case "SIGKILL":
+						case "SIGTERM":
 						vscode.window.showWarningMessage("Check was timed out.");
 						break;
-						case "SIGTERM":
+						case "SIGKILL":
 						vscode.window.showInformationMessage("Check was successfully cancelled.");
 						break;
 						default:
@@ -109,6 +118,8 @@ function registerCycloneCheck(context,out){
 			}
 			
 			if(error === null && stderr === ''){
+				// Remove the timer
+				vscode.commands.executeCommand(cancelCommandId, true);
 				// Move to showGraphicTrace ?
 				if (pngTraceWanted){
 					let dotFilePath = getDotFilePath();
@@ -119,22 +130,19 @@ function registerCycloneCheck(context,out){
 						out.appendLine(stderr);
 						console.log('stdout: ' + stdout);
 						console.log('stderr: ' + stderr);
-						rollbackFile(currentFilePath);
 					});
 				}
 				showNotification("Check finished. Details in Output -> Cyclone", 5000);
 			}
 		});
-		
 		showCheckNotification(child);
 	});
 	context.subscriptions.push(disposable);
 }
 
-//child = exec('java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --version',
 function registerCycloneInfo(context, out){
 	
-	let disposable = vscode.commands.registerCommand('cyclone.m5.version', function () {
+	let disposable = vscode.commands.registerCommand('cyclone.version', function () {
 		var exec = require('child_process').exec, child;
 		child = exec(cmd_ver,
 			function (error, stdout, stderr){
@@ -153,17 +161,17 @@ function registerCycloneInfo(context, out){
 	}
 	
 	function registerCycloneShowTrace(context, out){
-		let disposable = vscode.commands.registerCommand('cyclone.m2.trace', function () {
+		let disposable = vscode.commands.registerCommand('cyclone.trace', function () {
 			let traceFilePath = getTraceFilePath();
 			if (fs.existsSync(traceFilePath)) {
 				let date = new Date();
-				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(traceFilePath)} opened.\n`);
 				const openPath = vscode.Uri.file(traceFilePath);
 				vscode.workspace.openTextDocument(openPath).then(doc => {
 					vscode.window.showTextDocument(doc, {
 						viewColumn: vscode.ViewColumn.Beside // Open file in a split view
 					});
 				});
+				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(traceFilePath)} opened.\n`);
 			} else {
 				vscode.window.showErrorMessage("Trace file not found, please ensure that 'Graphic Trace' setting is disabled and check the specification before showing trace." );
 			}
@@ -172,13 +180,13 @@ function registerCycloneInfo(context, out){
 	}
 	
 	function registerCycloneShowTraceGraphic(context, out){
-		let disposable = vscode.commands.registerCommand('cyclone.m8.pngTrace', function () {
+		let disposable = vscode.commands.registerCommand('cyclone.pngTrace', function () {
 			let pngFilePath = getPngFilePath();
 			if (fs.existsSync(pngFilePath)) {
 				let date = new Date();
-				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(pngFilePath)} opened.\n`);
 				const openPath = vscode.Uri.file(pngFilePath);
 				vscode.commands.executeCommand('vscode.open', openPath, vscode.ViewColumn.Beside);
+				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(pngFilePath)} opened.\n`);
 			} else {
 				vscode.window.showErrorMessage("Trace file not found, please ensure that 'Graphic Trace' setting is activated and check the specification before showing trace." );
 			}
@@ -187,16 +195,17 @@ function registerCycloneInfo(context, out){
 	}
 	
 	function registerCycloneCleanTrace(context, out){
-		let disposable = vscode.commands.registerCommand('cyclone.m3.clean', function () {
+		let disposable = vscode.commands.registerCommand('cyclone.clean', function () {
 			let fileTraces = [];
 			let err = "";
 			let didDelete = false;
+			// Need to remove all 3 kind of trace files
 			fileTraces.push(getTraceFilePath());
 			fileTraces.push(getPngFilePath());
 			fileTraces.push(getDotFilePath());
 			
 			var exec = require('child_process').exec, child;
-			// Need to remove all 3 kind of trace files
+			// Try to delete each file
 			for (let i = 0; i < fileTraces.length; i++){
 				if (fs.existsSync(fileTraces[i])) {
 					didDelete = true;
@@ -225,7 +234,7 @@ function registerCycloneInfo(context, out){
 	}
 	
 	function registerCycloneCleanAllTrace(context, out){
-		let disposable = vscode.commands.registerCommand('cyclone.m4.cleanAll', function () {
+		let disposable = vscode.commands.registerCommand('cyclone.cleanAll', function () {
 			let traceDir = getTraceDirPath();
 			if (fs.existsSync(traceDir)) {
 				vscode.window.showInformationMessage(`Do you really want to delete repertory ${traceDir}?`, "Yes", "No")
@@ -252,7 +261,7 @@ function registerCycloneInfo(context, out){
 		}
 		
 		function registerCycloneSettings(context, out){
-			let disposable = vscode.commands.registerCommand('cyclone.m6.settings', function() {
+			let disposable = vscode.commands.registerCommand('cyclone.settings', function() {
 				vscode.commands.executeCommand( 'workbench.action.openSettings', 'Cyclone' )
 			});
 			
@@ -260,10 +269,10 @@ function registerCycloneInfo(context, out){
 		}
 		
 		function registerCycloneExamples(context, out){
-			let disposable = vscode.commands.registerCommand('cyclone.m7.examples', function() {
-				let choiceList = [];
+			let disposable = vscode.commands.registerCommand('cyclone.examples', function() {
+				let choiceList = []; // The list displayed to the user
 				let pathList = []; // The path corresponding to the choices
-				let exampleDir = path.join(lib_path,'examples');
+				let exampleDir = path.join(lib_path,'examples'); // Absolute path to provided examples 
 				let itemPath='';
 				
 				fs.readdirSync(exampleDir).forEach(item => {
@@ -271,7 +280,7 @@ function registerCycloneInfo(context, out){
 					if (item === "trace"){
 						return;
 					}
-					itemPath = path.join(exampleDir, item)
+					itemPath = path.join(exampleDir, item); // Get absolute path of file
 					if (fs.statSync(itemPath).isDirectory()){
 						choiceList.push({
 							label: path.basename(item),
@@ -310,10 +319,29 @@ function registerCycloneInfo(context, out){
 			context.subscriptions.push(disposable);
 		}
 		
+		
+		function registerCycloneSwitchTraceMode(context, out){
+			let disposable = vscode.commands.registerCommand('cyclone.switchTraceMode', function() {
+				let config = vscode.workspace.getConfiguration();
+				let newMode = !config.get("Trace.generateGraphicTrace");
+				config.update("Trace.generateGraphicTrace", newMode, true);
+				showNotification(newMode ? "Switched to graphic trace" : "Switched to text trace", 1500);
+			});
+			
+			context.subscriptions.push(disposable);
+		}
+		
 		function initialize(){
-			vscode.commands.registerCommand(commandId, () => {
+			vscode.commands.registerCommand(cancelCommandId, (finishedSuccessfully) => {
 				if (customCancellationToken) {
+					// If the check finished without any errors, there is no need to kill the process
+					keepChild = finishedSuccessfully;
+					
 					customCancellationToken.cancel();
+					// If user asked for graphic trace generation, then we need to remove the prepended line
+					if (vscode.workspace.getConfiguration().get("Trace.generateGraphicTrace")){
+						rollbackFile(getCurrFilePath());
+					}
 				}
 			})
 			
@@ -358,42 +386,72 @@ function registerCycloneInfo(context, out){
 			
 		}
 		
-		/**
-		* Show a notification that present a timer and a cancel button
-		* @param {import("child_process").ChildProcess} child
-		*/
-		async function showCheckNotification(child ) {
-			await vscode.window.withProgress({
-				location: vscode.ProgressLocation.Notification,
-				title: "Check progress",
-				cancellable: false
-			}, async (progress, token) => {
-				return new Promise((async (resolve) => {
-					customCancellationToken = new vscode.CancellationTokenSource();
-					
-					customCancellationToken.token.onCancellationRequested(() => {
-						customCancellationToken?.dispose();
-						customCancellationToken = null;
-						child.kill();
-						resolve(null);
-						return;
-					});
-					
-					const seconds = 7200;
-					for (let i = 1; i < seconds; i++) {
-						// Increment is summed up with the previous value
-						progress.report({ increment: seconds, message: `Running... (${i}s) [Cancel](command:${commandId})` })
-						await sleep(1000);
+		function initTraceStatusBar(subscriptions) {
+			subscriptions.push(myStatusBarItem);
+			
+			// register listener to make sure the status bar 
+			// item always up-to-date
+			subscriptions.push(vscode.workspace.onDidChangeConfiguration(updateStatusBarItem));
+			
+			// update status bar item once at start
+			updateStatusBarItem();
+		}
+		
+		function updateStatusBarItem() {
+			let graphicTraceActivated = vscode.workspace.getConfiguration().get("Trace.generateGraphicTrace")
+
+			if (graphicTraceActivated) {
+				myStatusBarItem.text = `$(symbol-misc) Graphic trace`;
+				checkGraphviz(); // Ensure that Graphviz is installed, else display warning
+				myStatusBarItem.show();
+			} else {
+				myStatusBarItem.text = `$(list-selection) Text trace`;
+				myStatusBarItem.show();
+			}
+		}
+	
+	
+	/**
+	* Show a notification that present a timer and a cancel button
+	* @param {import("child_process").ChildProcess} child
+	*/
+	// Based on a code written by Elio Struyf
+	async function showCheckNotification(child ) {
+		await vscode.window.withProgress({
+			location: vscode.ProgressLocation.Notification,
+			title: "Check progress",
+			cancellable: false // We're using a custom cancellation token
+		}, async (progress, token) => {
+			return new Promise((async (resolve) => {
+				customCancellationToken = new vscode.CancellationTokenSource();
+				
+				customCancellationToken.token.onCancellationRequested(() => {
+					customCancellationToken?.dispose();
+					customCancellationToken = null;
+
+					// Only kill if timed out. Allow us to click launch button twice without interfering
+					if (!keepChild){
+						child.kill("SIGKILL");
 					}
-					
 					resolve(null);
-				}));
-			});
-		}
-		
-		function deactivate() {}
-		module.exports = {
-			activate,
-			deactivate
-		}
-		
+					return;
+				});
+				
+				const seconds = 7200;
+				for (let i = 1; i < seconds; i++) {
+					// Increment is summed up with the previous value
+					progress.report({ increment: seconds, message: `Running... (${i}s) [Cancel](command:${cancelCommandId})` })
+					await sleep(1000);
+				}
+				
+				resolve(null);
+			}));
+		});
+	}
+	
+	function deactivate() {}
+	module.exports = {
+		activate,
+		deactivate
+	}
+	

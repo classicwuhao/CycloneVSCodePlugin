@@ -30,11 +30,11 @@
           "default": 10,
           "description": "Time before cancellation when checking specifications (in seconds)"
         },
-        "graphicTrace.GraphViz": {
+        "Trace.generateGraphicTrace": {
           "type": "boolean",
           "default": false,
           "format": "url",
-          "markdownDescription": "Generate png trace. Please note that you need to install Graphviz for this functionality. To install Graphviz: `https://graphviz.org/download/` "
+          "markdownDescription": "Generate .dot and .png trace. Please note that **you need to install Graphviz** for this functionality. To install Graphviz: `https://graphviz.org/download/` "
         }
       }
     },
@@ -64,47 +64,96 @@
     ],
     "commands": [
       {
-        "command": "cyclone.m1.check",
+        "command": "cyclone.check",
         "title": "Check This Cyclone Spec",
-        "category": "Cyclone"
+        "category": "Cyclone",
+        "icon": "$(debug-start)"
       },
       {
-        "command": "cyclone.m2.trace",
+        "command": "cyclone.trace",
         "title": "Show Trace File",
-        "category": "Cyclone"
+        "category": "Cyclone",
+        "icon": "$(file-text)"
       },
       {
-        "command": "cyclone.m8.pngTrace",
+        "command": "cyclone.pngTrace",
         "title": "Show Trace File (Graphic)",
-        "category": "Cyclone"
+        "category": "Cyclone",
+        "icon": "$(file-media)"
       },
       {
-        "command": "cyclone.m3.clean",
+        "command": "cyclone.clean",
         "title": "Clean Trace File",
-        "category": "Cyclone"
+        "category": "Cyclone",
+        "icon": "$(trash)"
       },
       {
-        "command": "cyclone.m4.cleanAll",
+        "command": "cyclone.cleanAll",
         "title": "Clean All Trace Files",
-        "category": "Cyclone"
+        "category": "Cyclone",
+        "icon": "$(flame)"
       },
       {
-        "command": "cyclone.m5.version",
+        "command": "cyclone.version",
         "title": "Version Info",
         "category": "Cyclone"
       },
       {
-        "command": "cyclone.m6.settings",
+        "command": "cyclone.settings",
         "title": "Settings",
+        "category": "Cyclone",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "cyclone.examples",
+        "title": "Load example...",
         "category": "Cyclone"
       },
       {
-        "command": "cyclone.m7.examples",
-        "title": "Load example...",
-        "category": "Cyclone"
+        "command": "cyclone.switchTraceMode",
+        "title": "Switch trace mode",
+        "category": "Cyclone",
+        "icon":"$(arrow-swap)"
       }
     ],
     "menus": {
+      "editor/title": [
+        {
+          "group": "navigation@1",
+          "command": "cyclone.check",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group": "navigation@2",
+          "command": "cyclone.trace",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group": "navigation@3",
+          "command": "cyclone.pngTrace",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group": "navigation@4",
+          "command": "cyclone.switchTraceMode",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group": "navigation@5",
+          "command": "cyclone.clean",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group": "navigation@6",
+          "command": "cyclone.cleanAll",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group": "navigation@7",
+          "command": "cyclone.settings",
+          "when": "resourceExtname == .cyclone"
+        }
+      ],
       "editor/context": [
         {
           "submenu": "Cyclone.Submenu",
@@ -113,40 +162,40 @@
       ],
       "Cyclone.Submenu": [
         {
-          "command": "cyclone.m1.check",
+          "command": "cyclone.check",
           "group": "1.Cyclone.MainItem@1", 
-          "when": "resourceExtname == .cyclone"
+          "when": "resourceExtname == .cyclone "
         },
         {
-          "command": "cyclone.m2.trace",
+          "command": "cyclone.trace",
           "group": "1.Cyclone.MainItem@2",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command": "cyclone.m8.pngTrace",
+          "command": "cyclone.pngTrace",
           "group": "1.Cyclone.MainItem@3",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command": "cyclone.m3.clean",
+          "command": "cyclone.clean",
           "group": "1.Cyclone.MainItem@4",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command": "cyclone.m4.cleanAll",
+          "command": "cyclone.cleanAll",
           "group": "1.Cyclone.MainItem@5", 
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command": "cyclone.m7.examples",
+          "command": "cyclone.examples",
           "group": "2.Cyclone.Examples"
         },
         {
-          "command": "cyclone.m5.version",
+          "command": "cyclone.version",
           "group": "3.Cyclone.MenuInfo"
         },
         {
-          "command": "cyclone.m6.settings",
+          "command": "cyclone.settings",
           "group": "3.Cyclone.MenuInfo"
         }
       ]
@@ -155,6 +204,57 @@
       {
         "label": "Cyclone",
         "id": "Cyclone.Submenu"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "getStarted",
+        "title": "Get started with Cyclone",
+        "description": "A simple walkthrough to display basic usage of cyclone",
+        "steps": [
+          {
+            "id": "loadExample",
+            "title": "Load example",
+            "description": "Open a new file and right click to open menu. Then in **Cyclone** menu, click on **Load example** and select ``chapter2`` then ``Counter.cyclone``.\n[Open new file](command:workbench.action.files.newUntitledFile)",
+            "media": { "image": "resources/walkthrough/load.png", "altText": "How to load an example" },
+            "completionEvents": ["onCommand:cyclone.examples"]
+          },
+          {
+            "id": "checkSpec",
+            "title": "Check a spec",
+            "description": "Now that you have opened the example, add the following line ``'option-trace=true;'`` and click on **Check This Cyclone Spec** in **Cyclone** menu.\n You can also click on $(debug-start).\n",
+            "media": { "image": "resources/walkthrough/check.png", "altText": "How to check a cyclone file" },
+            "completionEvents": ["onCommand:cyclone.check"]
+          },
+          {
+            "id": "showTrace",
+            "title": "Show the trace",
+            "description": "Once the check is done, open a terminal and go to **Output** -> **Cyclone** to get details on the check. Then in **Cyclone** menu click on **Show Trace File**.\n You can also click on $(file-text)\n",
+            "media": { "image": "resources/walkthrough/showTrace.png", "altText": "How to show a trace" },
+            "completionEvents": ["onCommand:cyclone.trace"]
+          },
+          {
+            "id": "settings",
+            "title": "Change settings",
+            "description": "The trace opened isn't very handy, let's generate a png trace instead. First in **Cyclone** menu click on **settings** or on $(settings-gear). In the settings menu check ``Generate Graphic Trace``.\n You could also simply click on $(arrow-swap) to change the settings.\n **Please note that you will need Graphviz** \n",
+            "media": { "image": "resources/walkthrough/settings.png", "altText": "How to manage setting" },
+            "completionEvents": ["onSettingChanged:Trace.generateGraphicTrace"]
+          },
+          {
+            "id": "showGraphicTrace",
+            "title": "Show graphic trace",
+            "description": "Come back to your Counter file and **check** the spec again. Once finished, in **Cyclone** menu click on **Show Trace (Graphic)**.\n You can also click on $(file-media). \n",
+            "media": { "image": "resources/walkthrough/showGraphicTrace.png", "altText": "How to how a graphic trace" },
+            "completionEvents": ["onCommand:cyclone.pngTrace"]
+          },
+          {
+            "id": "clean",
+            "title": "Clean trace files",
+            "description": "To avoid deleting trace files by hand, you can click **Clean Trace** or on $(trash) in **Cyclone** menu.\n You can also click on **Clean All Trace Files** or on $(flame) but this will delete all traces from all cyclone files in the same directory.\n",
+            "media": { "image": "resources/walkthrough/clean.png", "altText": "How to clean trace files" },
+            "completionEvents": ["onCommand:cyclone.cleanAll", "onCommand:cyclone.clean"]
+          }
+        ]
       }
     ]
   },

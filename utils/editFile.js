@@ -13,17 +13,14 @@ function modifyForPngTrace(filePath){
     if (!testText.includes('option-trace=true;')){
         return false;
     }
-
+    
     let data = fileText.split("\n");
     // Insert option for dot file
     data.splice(0, 0, 'option-output = "dot";');
     var text = data.join("\n");
     
-    fs.writeFile(filePath, text, function (err) {
-        if (err) {
-            vscode.window.showErrorMessage("Error: Couldn't generate a png trace")
-        };
-    });
+    // Need to sync  if user checked the spec twice, 
+    fs.writeFileSync(filePath, text);
     return true;
 }
 
@@ -39,11 +36,8 @@ function rollbackFile(filePath){
     }
     
     var text = data.join("\n");
-    fs.writeFile(filePath, text, function (err) {
-        if (err) {
-            vscode.window.showErrorMessage("Error: Couldn't execute rollback. Please note that a line was prepended to your file.")
-        };
-    });
+    // Need to sync because if user checked the spec twice, the function modifying the file after the roll back will se an empty file
+    fs.writeFileSync(filePath, text);
 }
 
 module.exports = {

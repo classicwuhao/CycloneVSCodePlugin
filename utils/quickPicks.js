@@ -7,7 +7,7 @@ const lib_path = path.join(extension.extensionPath, "Cyclone");
 
 
 /**
-* Display in the quickpicks the content of the selected folder
+* Display in the quick picks the content of the selected folder
 * @param {string} dirPath the path of the selected folder
 */
 function quickPickDir(dirPath){
