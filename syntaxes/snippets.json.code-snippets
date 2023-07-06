@@ -1,0 +1,51 @@
+{
+	// Place your CycloneVSCodePlugin workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+
+	"Machine declaration": {
+		"scope": "cyclone",
+		"prefix": "machine",
+		"body": [
+			"machine ${1:machineId} {",
+				"",
+				"\tstart state ${2:startStateId} {",
+				"\t}",
+				"\tfinal state ${3:finalStateId} {",
+				"\t}",
+				"\t",
+				"\ttransition ${4:transitionId} {${5:from} -> ${6:to} on \"${7:label}\"}",
+				"",
+				"\tgoal {",
+				"\t\tcheck for ${8:pathLength}",
+				"\t}",
+			"}"
+		],
+		"description": "Declare a state based spec"
+	},
+
+	"Graph declaration": {
+		"scope": "cyclone",
+		"prefix": "graph",
+		"body": [
+			"graph ${1:graphId} {",
+				"",
+				"\tstart node ${2:startNodeId} {",
+				"\t}",
+				"\tnode ${3:nodeId}{",
+				"\t}",
+				"",
+				"\tedge ${4:edgeId} {${5:from} -> ${6:to} on \"${7:label}\"}",
+				"",
+				"\tgoal {",
+				"\t\tcheck for ${8:pathLength}",
+				"\t}",
+			"}"
+		],
+		"description": "Declare a node based spec"
+	}
+
+}

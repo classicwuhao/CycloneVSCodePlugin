@@ -34,7 +34,7 @@
           "type": "boolean",
           "default": false,
           "format": "url",
-          "markdownDescription": "Generate .dot and .png trace. Please note that **you need to install Graphviz** for this functionality. To install Graphviz: `https://graphviz.org/download/` "
+          "markdownDescription": "Generate image based trace. Please note that **you need to install Graphviz** for this functionality. To install Graphviz: `https://graphviz.org/download/` "
         }
       }
     },
@@ -116,6 +116,12 @@
         "icon":"$(arrow-swap)"
       }
     ],
+    "snippets": [
+      {
+          "language": "cyclone",
+          "path": "./syntaxes/snippets.json.code-snippets"
+      }
+  ],
     "menus": {
       "editor/title": [
         {
@@ -229,20 +235,20 @@
           {
             "id": "showTrace",
             "title": "Show the trace",
-            "description": "Once the check is done, open a terminal and go to **Output** -> **Cyclone** to get details on the check. Then in **Cyclone** menu click on **Show Trace File**.\n You can also click on $(file-text)\n",
+            "description": "Once the check is done, open a terminal and go to **Output** (1) -> **Cyclone** (2) to get details on the check. Then in **Cyclone** menu click on **Show Trace File** (3).\n You can also click on $(file-text)\n",
             "media": { "image": "resources/walkthrough/showTrace.png", "altText": "How to show a trace" },
             "completionEvents": ["onCommand:cyclone.trace"]
           },
           {
             "id": "settings",
             "title": "Change settings",
-            "description": "The trace opened isn't very handy, let's generate a png trace instead. First in **Cyclone** menu click on **settings** or on $(settings-gear). In the settings menu check ``Generate Graphic Trace``.\n You could also simply click on $(arrow-swap) to change the settings.\n **Please note that you will need Graphviz** \n",
+            "description": "The trace opened isn't very handy, let's generate an image based trace instead. First in **Cyclone** menu click on **settings** or on $(settings-gear). In the settings menu check ``Generate Graphic Trace``.\n You could also simply click on $(arrow-swap) to change the settings.\n **Please note that you will need Graphviz installed** \n",
             "media": { "image": "resources/walkthrough/settings.png", "altText": "How to manage setting" },
             "completionEvents": ["onSettingChanged:Trace.generateGraphicTrace"]
           },
           {
             "id": "showGraphicTrace",
-            "title": "Show graphic trace",
+            "title": "Show image based trace",
             "description": "Come back to your Counter file and **check** the spec again. Once finished, in **Cyclone** menu click on **Show Trace (Graphic)**.\n You can also click on $(file-media). \n",
             "media": { "image": "resources/walkthrough/showGraphicTrace.png", "altText": "How to how a graphic trace" },
             "completionEvents": ["onCommand:cyclone.pngTrace"]
@@ -250,7 +256,7 @@
           {
             "id": "clean",
             "title": "Clean trace files",
-            "description": "To avoid deleting trace files by hand, you can click **Clean Trace** or on $(trash) in **Cyclone** menu.\n You can also click on **Clean All Trace Files** or on $(flame) but this will delete all traces from all cyclone files in the same directory.\n",
+            "description": "To avoid deleting trace files by hand, you can click **Clean Trace** or on $(trash) in **Cyclone** menu.\n You can also click on **Clean All Trace Files** or on $(flame) but this last one will delete all traces from all cyclone files in the same directory.\n",
             "media": { "image": "resources/walkthrough/clean.png", "altText": "How to clean trace files" },
             "completionEvents": ["onCommand:cyclone.cleanAll", "onCommand:cyclone.clean"]
           }

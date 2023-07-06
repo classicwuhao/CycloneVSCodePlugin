@@ -103,6 +103,7 @@ function registerCycloneCheck(context,out){
 					// Each killSignal is linked to a certain problem/user cancellation/time out
 					switch (error.signal) {
 						case "SIGTERM":
+						vscode.commands.executeCommand(cancelCommandId, false) // False because child has already been killed
 						vscode.window.showWarningMessage("Check was timed out.");
 						break;
 						case "SIGKILL":
@@ -118,12 +119,20 @@ function registerCycloneCheck(context,out){
 			}
 			
 			if(error === null && stderr === ''){
-				// Remove the timer
+				// Removes the timer
 				vscode.commands.executeCommand(cancelCommandId, true);
-				// Move to showGraphicTrace ?
+				if (stdout.includes("No Path found.") || stdout.includes("No Counter-example found.")){
+					showNotification("No path was generated for this spec." + (pngTraceWanted ? " Image based trace won't be generated." : ""), 4000);
+					pngTraceWanted = false;
+				}
 				if (pngTraceWanted){
 					let dotFilePath = getDotFilePath();
 					let pngFilePath = dotFilePath.slice(0, dotFilePath.length - 3) + "png"
+					// Error when generating dot file or No path was found
+					if (!fs.existsSync(dotFilePath)){
+						vscode.window.showWarningMessage("Dot trace not found.");
+						return;
+					}
 					exec(`cd ${currentDirPath} && dot -Tpng ${dotFilePath} -o  ${pngFilePath}`,
 					function (error, stdout, stderr){
 						out.appendLine(`[${date.toLocaleString()}]: `+stdout);
@@ -386,6 +395,10 @@ function registerCycloneInfo(context, out){
 			
 		}
 		
+		/**
+		 * Add a status bar for trace extension
+		 * @param {*} subscriptions 
+		 */
 		function initTraceStatusBar(subscriptions) {
 			subscriptions.push(myStatusBarItem);
 			
@@ -397,6 +410,9 @@ function registerCycloneInfo(context, out){
 			updateStatusBarItem();
 		}
 		
+		/**
+		 * Function that will update the content of the trace status bar
+		 */
 		function updateStatusBarItem() {
 			let graphicTraceActivated = vscode.workspace.getConfiguration().get("Trace.generateGraphicTrace")
 

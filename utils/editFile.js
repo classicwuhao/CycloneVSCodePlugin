@@ -19,7 +19,7 @@ function modifyForPngTrace(filePath){
     data.splice(0, 0, 'option-output = "dot";');
     var text = data.join("\n");
     
-    // Need to sync  if user checked the spec twice, 
+    // Need to sync to avoid overlap if user check the spec twice.
     fs.writeFileSync(filePath, text);
     return true;
 }
@@ -36,7 +36,7 @@ function rollbackFile(filePath){
     }
     
     var text = data.join("\n");
-    // Need to sync because if user checked the spec twice, the function modifying the file after the roll back will se an empty file
+    // Need to sync to avoid overlap if user check the spec twice.
     fs.writeFileSync(filePath, text);
 }
 
