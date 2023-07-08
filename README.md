@@ -1,8 +1,6 @@
 # Cyclone plugin for Visual Studio Code
 
-This plugin adds support for the cyclone specification language for graph-based structures.
-
-Cyclone aims to provide users a formal way of verifying/testing graph-based strcutures. Cyclone works together with our engine [uran](https://github.com/classicwuhao/uran) and compiles a specification into a set of path conditions that can be efficiently solved by an SMT solver. Click [here](https://classicwuhao.github.io/cyclone_tutorial/tutorial-content.html) to learn more about cyclone.
+This plugin adds support for the cyclone specification language for graph-based structures. Cyclone is a new specification language for verifying/testing graph-based structures. Unlike other formal methods tools, Cyclone uses simple notations and allows users to construct verification tasks by building graphs. Cyclone promotes the idea of think in graph, and makes verification tasks easy to be understood/visualised and learn for those who do not have verification background. Click here to learn more about cyclone.
 
 ## Features
 
