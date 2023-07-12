@@ -2,7 +2,7 @@ const vscode = require('vscode');
 const fs = require("fs");
 const path = require('path');
 
-const extension = vscode.extensions.getExtension("HaoWu.Cyclone");
+const extension = vscode.extensions.getExtension("HaoWu-BastienTurco.Cyclone");
 const lib_path = path.join(extension.extensionPath, "Cyclone");
 
 

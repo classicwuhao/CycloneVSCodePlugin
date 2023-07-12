@@ -9,7 +9,8 @@ const vscode = require('vscode');
 const fs = require("fs");
 const path = require('path');
 const os = require ('os');
-const extension = vscode.extensions.getExtension("HaoWu.Cyclone");
+
+const extension = vscode.extensions.getExtension("HaoWu-BastienTurco.Cyclone");
 const lib_path = path.join(extension.extensionPath, "Cyclone");
 const ext_path = path.join(lib_path, "cyclone.jar");
 var cmd_ver='';

@@ -16,7 +16,7 @@ This plugin adds support for the cyclone specification language for graph-based 
 3. Open "Extensions" panel (CTRL + SHIFT + X).
 4. Click on "..." button.
 5. Choose "Install from VSIX..." command.
-6. Pick "Cyclone-0.0.8.vsix" file and confirm.
+6. Pick "Cyclone-0.1.0.vsix" file and confirm.
 7. Wait until a notification appears.
 8. Click on "Reload now" button.
 9. Open any .cyclone file.
