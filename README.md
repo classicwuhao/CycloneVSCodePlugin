@@ -11,12 +11,12 @@ This plugin adds support for the cyclone specification language for graph-based 
 - Cyclone specifications examples
 
 ## Installation
-1. Download "Cyclone-0.1.0.vsix" file from this repo.
+1. If your processor architecture is x86_64, download `Cyclone-x64.vsix` file from this repo. If your processor architecture is ARM (Macbook M1/M2 for example) download `Cyclone-ARM.vsix` file from this repo.
 2. Open VSCode.
 3. Open "Extensions" panel (CTRL + SHIFT + X).
 4. Click on "..." button.
 5. Choose "Install from VSIX..." command.
-6. Pick "Cyclone-0.1.0.vsix" file and confirm.
+6. Pick `Cyclone-x64.vsix` or `Cyclone-ARM.vsix` file, depending on your architecture (see **1.**) and confirm.
 7. Wait until a notification appears.
 8. Click on "Reload now" button.
 9. Open any .cyclone file.

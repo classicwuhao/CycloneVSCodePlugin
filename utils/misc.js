@@ -35,15 +35,19 @@ async function showNotification( message, timeout = 5000 ) {
 
     /**
      * 
-     * @returns  'Linux' | 'MacOS' | 'Windows' | 'Unsupport' Depending on user OS
+     * @returns  'Linux' | 'MacOSARM' | 'MacOSIntel' | 'Windows' | 'Unsupport' Depending on user OS
      */
     function checkOS(){
-        const platform = os.platform();		
+        const platform = os.platform();	
+        const arch = os.arch()
         if (platform=='linux'){
             return 'Linux';
         }
         else if (platform=='darwin'){
-            return 'MacOS';
+            if (arch === 'arm64'){
+                return 'MacOSARM';
+            }
+            return 'MacOSIntel';
         }
         else if (platform=='win32'){
             return 'Windows';

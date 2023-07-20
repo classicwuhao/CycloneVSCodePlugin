@@ -1,9 +1,3 @@
-const { getTraceDirPath, getTraceFilePath, getCurrFilePath, getDotFilePath, getPngFilePath} = require("./utils/paths");
-const {highlightErrors, displayWarningAndGenerationError, disposeHighlights} = require("./utils/errors")
-const {quickPickDir, loadFile} = require("./utils/quickPicks");
-const {modifyForPngTrace, rollbackFile} = require("./utils/editFile");
-const {checkJavaVersion, checkOS, showNotification, sleep, checkGraphviz} = require("./utils/misc");
-
 const { stdout } = require('process');
 const vscode = require('vscode');
 const fs = require("fs");
@@ -11,8 +5,14 @@ const path = require('path');
 const os = require ('os');
 
 const extension = vscode.extensions.getExtension("HaoWu-BastienTurco.Cyclone");
-const lib_path = path.join(extension.extensionPath, "Cyclone");
-const ext_path = path.join(lib_path, "cyclone.jar");
+var lib_path = "";
+var ext_path = "";
+
+const { getTraceDirPath, getTraceFilePath, getCurrFilePath, getDotFilePath, getPngFilePath} = require("./utils/paths");
+const {highlightErrors, displayWarningAndGenerationError, disposeHighlights} = require("./utils/errors")
+const {modifyForPngTrace, rollbackFile} = require("./utils/editFile");
+const {checkJavaVersion, checkOS, showNotification, sleep, checkGraphviz} = require("./utils/misc");
+
 var cmd_ver='';
 var cmd_java_ver='java -jar cyclone.jar --version';
 var cmd_cyclone='';
@@ -356,6 +356,15 @@ function registerCycloneInfo(context, out){
 			})
 			
 			let sys=checkOS();
+
+			// ARM and Intel need different libraries
+			if (sys === 'MacOSARM'){
+				lib_path = path.join(extension.extensionPath, "CycloneARM");
+			} else {
+				lib_path = path.join(extension.extensionPath, "Cyclone");
+			}
+			ext_path = path.join(lib_path, "cyclone.jar");
+
 			checkJavaVersion();
 			var exec = require('child_process').exec;
 			
@@ -374,7 +383,7 @@ function registerCycloneInfo(context, out){
 				return;
 			}
 			
-			if (sys=='MacOS'){
+			if (sys=='MacOSARM' || sys=='MacOSIntel'){
 				cmd_ver=`cd ${lib_path} && export DYLD_LIBRARY_PATH=. && ${cmd_java_ver}`;
 				exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
 					if (error){
@@ -469,6 +478,10 @@ function registerCycloneInfo(context, out){
 	function deactivate() {}
 	module.exports = {
 		activate,
-		deactivate
+		deactivate,
+		extension
 	}
+
+	// quickPicks.js require the export of extension var to work
+	const {quickPickDir, loadFile} = require("./utils/quickPicks");
 	
