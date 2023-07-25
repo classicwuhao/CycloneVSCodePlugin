@@ -76,6 +76,12 @@
         "icon": "$(file-text)"
       },
       {
+        "command": "cyclone.dotTrace",
+        "title": "Show Trace File (Dot)",
+        "category": "Cyclone",
+        "icon": "$(file-code)"
+      },
+      {
         "command": "cyclone.pngTrace",
         "title": "Show Trace File (Graphic)",
         "category": "Cyclone",
@@ -136,26 +142,31 @@
         },
         {
           "group": "navigation@3",
-          "command": "cyclone.pngTrace",
+          "command": "cyclone.dotTrace",
           "when": "resourceExtname == .cyclone"
         },
         {
           "group": "navigation@4",
-          "command": "cyclone.switchTraceMode",
+          "command": "cyclone.pngTrace",
           "when": "resourceExtname == .cyclone"
         },
         {
           "group": "navigation@5",
-          "command": "cyclone.clean",
+          "command": "cyclone.switchTraceMode",
           "when": "resourceExtname == .cyclone"
         },
         {
           "group": "navigation@6",
-          "command": "cyclone.cleanAll",
+          "command": "cyclone.clean",
           "when": "resourceExtname == .cyclone"
         },
         {
           "group": "navigation@7",
+          "command": "cyclone.cleanAll",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
+          "group": "navigation@8",
           "command": "cyclone.settings",
           "when": "resourceExtname == .cyclone"
         }
@@ -178,18 +189,23 @@
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command": "cyclone.pngTrace",
+          "command": "cyclone.dotTrace",
           "group": "1.Cyclone.MainItem@3",
           "when": "resourceExtname == .cyclone"
         },
         {
-          "command": "cyclone.clean",
+          "command": "cyclone.pngTrace",
           "group": "1.Cyclone.MainItem@4",
           "when": "resourceExtname == .cyclone"
         },
         {
+          "command": "cyclone.clean",
+          "group": "1.Cyclone.MainItem@5",
+          "when": "resourceExtname == .cyclone"
+        },
+        {
           "command": "cyclone.cleanAll",
-          "group": "1.Cyclone.MainItem@5", 
+          "group": "1.Cyclone.MainItem@6", 
           "when": "resourceExtname == .cyclone"
         },
         {

@@ -32,6 +32,7 @@ function activate(context) {
 	registerCycloneCheck(context,out);
 	registerCycloneInfo(context,out);
 	registerCycloneShowTrace(context, out);
+	registerCycloneShowDotTrace(context, out);
 	registerCycloneShowTraceGraphic(context, out);
 	registerCycloneCleanTrace(context, out);
 	registerCycloneCleanAllTrace(context, out);
@@ -184,6 +185,25 @@ function registerCycloneInfo(context, out){
 				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(traceFilePath)} opened.\n`);
 			} else {
 				vscode.window.showErrorMessage("Trace file not found, please ensure that 'Graphic Trace' setting is disabled and check the specification before showing trace." );
+			}
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerCycloneShowDotTrace(context, out){
+		let disposable = vscode.commands.registerCommand('cyclone.dotTrace', function () {
+			let dotFilePath = getDotFilePath();
+			if (fs.existsSync(dotFilePath)) {
+				let date = new Date();
+				const openPath = vscode.Uri.file(dotFilePath);
+				vscode.workspace.openTextDocument(openPath).then(doc => {
+					vscode.window.showTextDocument(doc, {
+						viewColumn: vscode.ViewColumn.Beside // Open file in a split view
+					});
+				});
+				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(dotFilePath)} opened.\n`);
+			} else {
+				vscode.window.showErrorMessage('Dot file not found, please ensure that you generated a dot trace with \'option-output="dot"\' and checked the specification before showing trace.' );
 			}
 		});
 		context.subscriptions.push(disposable);
