@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const path = require('path');
-const { trace } = require('console');
+const charToReplace = /["`$]/g
 
 
 /**
@@ -11,7 +11,9 @@ function getCurrFilePath() {
 	let currentOpenTabPath = vscode.window.activeTextEditor.document.fileName;
 	
 	if(currentOpenTabPath !== '') {
-		return currentOpenTabPath;
+		// Need to handle special characters
+		// WARNING /!\ : Some API like FileSystem (fs) or VSCode.uri don't handle \ so need to remove them
+		return currentOpenTabPath.replaceAll(charToReplace, "\\$&");
 	} 
 	else { // Display error and don't check the spec
 		vscode.window.showErrorMessage("Working folder not found, please open a folder and try again" );

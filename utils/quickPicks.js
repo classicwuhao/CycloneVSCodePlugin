@@ -25,13 +25,13 @@ function quickPickDir(dirPath){
     
     let itemPath = '';
     
-    fs.readdirSync(dirPath).forEach(item => {
+    fs.readdirSync(dirPath.replaceAll("\\", "")).forEach(item => {
         // Do not display 'trace/' folder 
         if (item === "trace"){
             return;
         }
         itemPath = path.join(dirPath, item)
-        if (fs.statSync(itemPath).isDirectory()){
+        if (fs.statSync(itemPath.replaceAll("\\", "")).isDirectory()){
             choiceList.push({
                 label: path.basename(item),
                 description: "Go to "+path.basename(item)+" examples."
@@ -58,7 +58,7 @@ function quickPickDir(dirPath){
         }
         
         let selectedPath = pathList[choiceList.indexOf(selection)];
-        if (fs.statSync(selectedPath).isDirectory()){
+        if (fs.statSync(selectedPath.replaceAll("\\", "")).isDirectory()){
             // Show quickPicks for selected folder
             quickPickDir(selectedPath);	
             return;
@@ -72,8 +72,8 @@ function quickPickDir(dirPath){
 * @param {string} filePath path of the file to be loaded
 */
 function loadFile(filePath){
-    if (fs.existsSync(filePath)) {
-        const openPath = vscode.Uri.file(filePath);
+    if (fs.existsSync(filePath.replaceAll("\\", ""))) {
+        const openPath = vscode.Uri.file(filePath.replaceAll("\\", ""));
         vscode.workspace.openTextDocument(openPath).then(doc => {
             vscode.window.showTextDocument(doc);
         });

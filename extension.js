@@ -7,6 +7,7 @@ const os = require ('os');
 const extension = vscode.extensions.getExtension("HaoWu-BastienTurco.Cyclone");
 var lib_path = "";
 var ext_path = "";
+const charToReplace = /["`$]/g
 
 const { getTraceDirPath, getTraceFilePath, getCurrFilePath, getDotFilePath, getPngFilePath} = require("./utils/paths");
 const {highlightErrors, displayWarningAndGenerationError, disposeHighlights} = require("./utils/errors")
@@ -70,7 +71,7 @@ function registerCycloneCheck(context,out){
 			currentDirPath = "/d "+ currentDirPath; // Need to specify /d to change hard drive if needed
 		}
 		
-		child = exec('cd '+currentDirPath+ ' && java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + editor.document.fileName + '"',
+		child = exec('cd "'+currentDirPath+ '" && java "-Djava.library.path=' + lib_path + '" -jar "' + ext_path + '" --nocolor "' + currentFilePath + '"',
 		{
 			timeout: vscode.workspace.getConfiguration().get("check.Timeout")*1000, // Convert into s
 			killSignal:"SIGTERM" // Needed to distinguish with user cancellation
@@ -131,11 +132,11 @@ function registerCycloneCheck(context,out){
 					let dotFilePath = getDotFilePath();
 					let pngFilePath = dotFilePath.slice(0, dotFilePath.length - 3) + "png"
 					// Error when generating dot file or No path was found
-					if (!fs.existsSync(dotFilePath)){
+					if (!fs.existsSync(dotFilePath.replaceAll("\\", ""))){
 						vscode.window.showWarningMessage("Dot trace not found.");
 						return;
 					}
-					exec(`cd ${currentDirPath} && dot -Tpng ${dotFilePath} -o  ${pngFilePath}`,
+					exec(`cd "${currentDirPath}" && dot -Tpng "${dotFilePath}" -o  "${pngFilePath}"`,
 					function (error, stdout, stderr){
 						out.appendLine(`[${date.toLocaleString()}]: `+stdout);
 						out.appendLine(stderr);
@@ -174,9 +175,9 @@ function registerCycloneInfo(context, out){
 	function registerCycloneShowTrace(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.trace', function () {
 			let traceFilePath = getTraceFilePath();
-			if (fs.existsSync(traceFilePath)) {
+			if (fs.existsSync(traceFilePath.replaceAll("\\", ""))) {
 				let date = new Date();
-				const openPath = vscode.Uri.file(traceFilePath);
+				const openPath = vscode.Uri.file(traceFilePath.replaceAll("\\", ""));
 				vscode.workspace.openTextDocument(openPath).then(doc => {
 					vscode.window.showTextDocument(doc, {
 						viewColumn: vscode.ViewColumn.Beside // Open file in a split view
@@ -193,9 +194,9 @@ function registerCycloneInfo(context, out){
 	function registerCycloneShowDotTrace(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.dotTrace', function () {
 			let dotFilePath = getDotFilePath();
-			if (fs.existsSync(dotFilePath)) {
+			if (fs.existsSync(dotFilePath.replaceAll("\\", ""))) {
 				let date = new Date();
-				const openPath = vscode.Uri.file(dotFilePath);
+				const openPath = vscode.Uri.file(dotFilePath.replaceAll("\\", ""));
 				vscode.workspace.openTextDocument(openPath).then(doc => {
 					vscode.window.showTextDocument(doc, {
 						viewColumn: vscode.ViewColumn.Beside // Open file in a split view
@@ -212,9 +213,9 @@ function registerCycloneInfo(context, out){
 	function registerCycloneShowTraceGraphic(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.pngTrace', function () {
 			let pngFilePath = getPngFilePath();
-			if (fs.existsSync(pngFilePath)) {
+			if (fs.existsSync(pngFilePath.replaceAll("\\", ""))) {
 				let date = new Date();
-				const openPath = vscode.Uri.file(pngFilePath);
+				const openPath = vscode.Uri.file(pngFilePath.replaceAll("\\", ""));
 				vscode.commands.executeCommand('vscode.open', openPath, vscode.ViewColumn.Beside);
 				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(pngFilePath)} opened.\n`);
 			} else {
@@ -237,9 +238,9 @@ function registerCycloneInfo(context, out){
 			var exec = require('child_process').exec, child;
 			// Try to delete each file
 			for (let i = 0; i < fileTraces.length; i++){
-				if (fs.existsSync(fileTraces[i])) {
+				if (fs.existsSync(fileTraces[i].replaceAll("\\", ""))) {
 					didDelete = true;
-					child = exec(rmCmd+fileTraces[i], function (error, stdout, stderr){
+					child = exec(`${rmCmd} "${fileTraces[i]}"`, function (error, stdout, stderr){
 						if(error !== null){
 							err += stderr + "\n";
 							console.log('exec error: ' + error);
@@ -266,13 +267,13 @@ function registerCycloneInfo(context, out){
 	function registerCycloneCleanAllTrace(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.cleanAll', function () {
 			let traceDir = getTraceDirPath();
-			if (fs.existsSync(traceDir)) {
+			if (fs.existsSync(traceDir.replaceAll("\\", ""))) {
 				vscode.window.showInformationMessage(`Do you really want to delete repertory ${traceDir}?`, "Yes", "No")
 				.then(answer => {
 					if (answer === "Yes") {
 						var exec = require('child_process').exec, child;
 						let date = new Date();
-						child = exec(rmDirCmd+traceDir, 
+						child = exec(`${rmDirCmd} "${traceDir}"`, 
 							function (error, stdout, stderr){
 								out.appendLine("["+date.toLocaleString()+"]: "+stderr);
 								if(error !== null){
@@ -305,13 +306,13 @@ function registerCycloneInfo(context, out){
 				let exampleDir = path.join(lib_path,'examples'); // Absolute path to provided examples 
 				let itemPath='';
 				
-				fs.readdirSync(exampleDir).forEach(item => {
+				fs.readdirSync(exampleDir.replaceAll("\\", "")).forEach(item => {
 					// Remove 'trace/' folder from accessible directory
 					if (item === "trace"){
 						return;
 					}
 					itemPath = path.join(exampleDir, item); // Get absolute path of file
-					if (fs.statSync(itemPath).isDirectory()){
+					if (fs.statSync(itemPath.replaceAll("\\", "")).isDirectory()){
 						choiceList.push({
 							label: path.basename(item),
 							description: `Go to ${path.basename(item)} examples.`
@@ -337,7 +338,7 @@ function registerCycloneInfo(context, out){
 					}
 					
 					let selectedPath = pathList[choiceList.indexOf(selection)];
-					if (fs.statSync(selectedPath).isDirectory()){
+					if (fs.statSync(selectedPath.replaceAll("\\", "")).isDirectory()){
 						// Show quickPicks for selected folder
 						quickPickDir(selectedPath);	
 						return;
@@ -379,9 +380,9 @@ function registerCycloneInfo(context, out){
 
 			// ARM and Intel need different libraries
 			if (sys === 'MacOSARM'){
-				lib_path = path.join(extension.extensionPath, "CycloneARM");
+				lib_path = path.join(extension.extensionPath, "CycloneARM").replaceAll(charToReplace, "\\$&");
 			} else {
-				lib_path = path.join(extension.extensionPath, "Cyclone");
+				lib_path = path.join(extension.extensionPath, "Cyclone").replaceAll(charToReplace, "\\$&");
 			}
 			ext_path = path.join(lib_path, "cyclone.jar");
 
@@ -389,8 +390,8 @@ function registerCycloneInfo(context, out){
 			var exec = require('child_process').exec;
 			
 			if (sys=='Linux'){
-				cmd_ver=`cd ${lib_path} &&  export LD_LIBRARY_PATH=. && ${cmd_java_ver}`;
-				let p1=exec ('export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
+				cmd_ver=`cd "${lib_path}" &&  export LD_LIBRARY_PATH=. && ${cmd_java_ver}`;
+				let p1=exec (`export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"${lib_path}"`,(error,stdout,stderr)=>{
 					if (error){
 						console.error(`error: ${error.message}`);
 						return;
@@ -404,8 +405,8 @@ function registerCycloneInfo(context, out){
 			}
 			
 			if (sys=='MacOSARM' || sys=='MacOSIntel'){
-				cmd_ver=`cd ${lib_path} && export DYLD_LIBRARY_PATH=. && ${cmd_java_ver}`;
-				exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:'+lib_path,(error,stdout,stderr)=>{
+				cmd_ver=`cd "${lib_path}" && export DYLD_LIBRARY_PATH=. && ${cmd_java_ver}`;
+				exec ('export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:"'+lib_path+'"',(error,stdout,stderr)=>{
 					if (error){
 						console.error(`error: ${error.message}`);
 						return;
@@ -421,7 +422,7 @@ function registerCycloneInfo(context, out){
 			
 			rmCmd = "del ";
 			rmDirCmd = "rmdir /s /q ";
-			cmd_ver=`cd ${lib_path} && ${cmd_java_ver}`;
+			cmd_ver=`cd "${lib_path}" && ${cmd_java_ver}`;
 			
 		}
 		
