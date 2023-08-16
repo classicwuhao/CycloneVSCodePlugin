@@ -119,15 +119,15 @@
         "command": "cyclone.switchTraceMode",
         "title": "Switch trace mode",
         "category": "Cyclone",
-        "icon":"$(arrow-swap)"
+        "icon": "$(arrow-swap)"
       }
     ],
     "snippets": [
       {
-          "language": "cyclone",
-          "path": "./syntaxes/snippets.json.code-snippets"
+        "language": "cyclone",
+        "path": "./syntaxes/snippets.json.code-snippets"
       }
-  ],
+    ],
     "menus": {
       "editor/title": [
         {
@@ -180,7 +180,7 @@
       "Cyclone.Submenu": [
         {
           "command": "cyclone.check",
-          "group": "1.Cyclone.MainItem@1", 
+          "group": "1.Cyclone.MainItem@1",
           "when": "resourceExtname == .cyclone "
         },
         {
@@ -205,7 +205,7 @@
         },
         {
           "command": "cyclone.cleanAll",
-          "group": "1.Cyclone.MainItem@6", 
+          "group": "1.Cyclone.MainItem@6",
           "when": "resourceExtname == .cyclone"
         },
         {
@@ -238,43 +238,74 @@
             "id": "loadExample",
             "title": "Load example",
             "description": "Open a new file and right click to open menu. Then in **Cyclone** menu, click on **Load example** and select ``chapter2`` then ``Counter.cyclone``.\n[Open new file](command:workbench.action.files.newUntitledFile)",
-            "media": { "image": "resources/walkthrough/load.png", "altText": "How to load an example" },
-            "completionEvents": ["onCommand:cyclone.examples"]
+            "media": {
+              "image": "resources/walkthrough/load.png",
+              "altText": "How to load an example"
+            },
+            "completionEvents": [
+              "onCommand:cyclone.examples"
+            ]
           },
           {
             "id": "checkSpec",
             "title": "Check a spec",
             "description": "Now that you have opened the example, add the following line ``'option-trace=true;'`` and click on **Check This Cyclone Spec** in **Cyclone** menu.\n You can also click on $(debug-start).\n",
-            "media": { "image": "resources/walkthrough/check.png", "altText": "How to check a cyclone file" },
-            "completionEvents": ["onCommand:cyclone.check"]
+            "media": {
+              "image": "resources/walkthrough/check.png",
+              "altText": "How to check a cyclone file"
+            },
+            "completionEvents": [
+              "onCommand:cyclone.check"
+            ]
           },
           {
             "id": "showTrace",
             "title": "Show the trace",
             "description": "Once the check is done, open a terminal and go to **Output** (1) -> **Cyclone** (2) to get details on the check. Then in **Cyclone** menu click on **Show Trace File** (3).\n You can also click on $(file-text)\n",
-            "media": { "image": "resources/walkthrough/showTrace.png", "altText": "How to show a trace" },
-            "completionEvents": ["onCommand:cyclone.trace"]
+            "media": {
+              "image": "resources/walkthrough/showTrace.png",
+              "altText": "How to show a trace"
+            },
+            "completionEvents": [
+              "onCommand:cyclone.trace"
+            ]
           },
           {
             "id": "settings",
             "title": "Change settings",
             "description": "The trace opened isn't very handy, let's generate an image based trace instead. First in **Cyclone** menu click on **settings** or on $(settings-gear). In the settings menu check ``Generate Graphic Trace``.\n You could also simply click on $(arrow-swap) to change the settings.\n **Please note that you will need Graphviz installed** \n",
-            "media": { "image": "resources/walkthrough/settings.png", "altText": "How to manage setting" },
-            "completionEvents": ["onSettingChanged:Trace.generateGraphicTrace"]
+            "media": {
+              "image": "resources/walkthrough/settings.png",
+              "altText": "How to manage setting"
+            },
+            "completionEvents": [
+              "onSettingChanged:Trace.generateGraphicTrace"
+            ]
           },
           {
             "id": "showGraphicTrace",
             "title": "Show image based trace",
             "description": "Come back to your Counter file and **check** the spec again. Once finished, in **Cyclone** menu click on **Show Trace (Graphic)**.\n You can also click on $(file-media). \n",
-            "media": { "image": "resources/walkthrough/showGraphicTrace.png", "altText": "How to how a graphic trace" },
-            "completionEvents": ["onCommand:cyclone.pngTrace"]
+            "media": {
+              "image": "resources/walkthrough/showGraphicTrace.png",
+              "altText": "How to how a graphic trace"
+            },
+            "completionEvents": [
+              "onCommand:cyclone.pngTrace"
+            ]
           },
           {
             "id": "clean",
             "title": "Clean trace files",
             "description": "To avoid deleting trace files by hand, you can click **Clean Trace** or on $(trash) in **Cyclone** menu.\n You can also click on **Clean All Trace Files** or on $(flame) but this last one will delete all traces from all cyclone files in the same directory.\n",
-            "media": { "image": "resources/walkthrough/clean.png", "altText": "How to clean trace files" },
-            "completionEvents": ["onCommand:cyclone.cleanAll", "onCommand:cyclone.clean"]
+            "media": {
+              "image": "resources/walkthrough/clean.png",
+              "altText": "How to clean trace files"
+            },
+            "completionEvents": [
+              "onCommand:cyclone.cleanAll",
+              "onCommand:cyclone.clean"
+            ]
           }
         ]
       }
@@ -282,5 +313,10 @@
   },
   "devDependencies": {
     "vscode": "^1.1.37"
+  },
+  "dependencies": {
+    "audit": "^0.0.6",
+    "fix": "^0.0.3",
+    "vsce": "^2.15.0"
   }
 }
