@@ -7,7 +7,6 @@ const os = require ('os');
 const extension = vscode.extensions.getExtension("HaoWu-BastienTurco.Cyclone");
 var lib_path = "";
 var ext_path = "";
-const charToReplace = /["`$]/g
 
 const { getTraceDirPath, getTraceFilePath, getCurrFilePath, getDotFilePath, getPngFilePath} = require("./utils/paths");
 const {highlightErrors, displayWarningAndGenerationError, disposeHighlights} = require("./utils/errors")
@@ -16,6 +15,7 @@ const {checkJavaVersion, checkOS, showNotification, sleep, checkGraphviz} = requ
 
 var cmd_ver='';
 var cmd_java_ver='java -jar cyclone.jar --version';
+var isWindows = checkOS() === "Windows"
 var cmd_cyclone='';
 // Both cmd are changed for windows in initialize()
 var rmCmd = "rm ";
@@ -24,7 +24,7 @@ const cancelCommandId = "cyclone.cancelCheck";
 var customCancellationToken = null;
 var myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 var keepChild = false; // Global var needed for cancellation token
-
+const charToReplace = isWindows ? /["`]/g : /["`$]/g
 
 
 function activate(context) {
@@ -132,7 +132,7 @@ function registerCycloneCheck(context,out){
 					let dotFilePath = getDotFilePath();
 					let pngFilePath = dotFilePath.slice(0, dotFilePath.length - 3) + "png"
 					// Error when generating dot file or No path was found
-					if (!fs.existsSync(dotFilePath.replaceAll("\\", ""))){
+					if (!fs.existsSync(formatBackSlash(dotFilePath))){
 						vscode.window.showWarningMessage("Dot trace not found.");
 						return;
 					}
@@ -175,9 +175,9 @@ function registerCycloneInfo(context, out){
 	function registerCycloneShowTrace(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.trace', function () {
 			let traceFilePath = getTraceFilePath();
-			if (fs.existsSync(traceFilePath.replaceAll("\\", ""))) {
+			if (fs.existsSync(formatBackSlash(traceFilePath))) {
 				let date = new Date();
-				const openPath = vscode.Uri.file(traceFilePath.replaceAll("\\", ""));
+				const openPath = vscode.Uri.file(formatBackSlash(traceFilePath));
 				vscode.workspace.openTextDocument(openPath).then(doc => {
 					vscode.window.showTextDocument(doc, {
 						viewColumn: vscode.ViewColumn.Beside // Open file in a split view
@@ -194,9 +194,9 @@ function registerCycloneInfo(context, out){
 	function registerCycloneShowDotTrace(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.dotTrace', function () {
 			let dotFilePath = getDotFilePath();
-			if (fs.existsSync(dotFilePath.replaceAll("\\", ""))) {
+			if (fs.existsSync(formatBackSlash(dotFilePath))) {
 				let date = new Date();
-				const openPath = vscode.Uri.file(dotFilePath.replaceAll("\\", ""));
+				const openPath = vscode.Uri.file(formatBackSlash(dotFilePath));
 				vscode.workspace.openTextDocument(openPath).then(doc => {
 					vscode.window.showTextDocument(doc, {
 						viewColumn: vscode.ViewColumn.Beside // Open file in a split view
@@ -213,9 +213,9 @@ function registerCycloneInfo(context, out){
 	function registerCycloneShowTraceGraphic(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.pngTrace', function () {
 			let pngFilePath = getPngFilePath();
-			if (fs.existsSync(pngFilePath.replaceAll("\\", ""))) {
+			if (fs.existsSync(formatBackSlash(pngFilePath))) {
 				let date = new Date();
-				const openPath = vscode.Uri.file(pngFilePath.replaceAll("\\", ""));
+				const openPath = vscode.Uri.file(formatBackSlash(pngFilePath));
 				vscode.commands.executeCommand('vscode.open', openPath, vscode.ViewColumn.Beside);
 				out.appendLine(`[${date.toLocaleString()}]: ${path.basename(pngFilePath)} opened.\n`);
 			} else {
@@ -238,7 +238,7 @@ function registerCycloneInfo(context, out){
 			var exec = require('child_process').exec, child;
 			// Try to delete each file
 			for (let i = 0; i < fileTraces.length; i++){
-				if (fs.existsSync(fileTraces[i].replaceAll("\\", ""))) {
+				if (fs.existsSync(formatBackSlash(fileTraces[i]))) {
 					didDelete = true;
 					child = exec(`${rmCmd} "${fileTraces[i]}"`, function (error, stdout, stderr){
 						if(error !== null){
@@ -267,7 +267,7 @@ function registerCycloneInfo(context, out){
 	function registerCycloneCleanAllTrace(context, out){
 		let disposable = vscode.commands.registerCommand('cyclone.cleanAll', function () {
 			let traceDir = getTraceDirPath();
-			if (fs.existsSync(traceDir.replaceAll("\\", ""))) {
+			if (fs.existsSync(formatBackSlash((traceDir)))) {
 				vscode.window.showInformationMessage(`Do you really want to delete repertory ${traceDir}?`, "Yes", "No")
 				.then(answer => {
 					if (answer === "Yes") {
@@ -306,13 +306,13 @@ function registerCycloneInfo(context, out){
 				let exampleDir = path.join(lib_path,'examples'); // Absolute path to provided examples 
 				let itemPath='';
 				
-				fs.readdirSync(exampleDir.replaceAll("\\", "")).forEach(item => {
+				fs.readdirSync(formatBackSlash((exampleDir))).forEach(item => {
 					// Remove 'trace/' folder from accessible directory
 					if (item === "trace"){
 						return;
 					}
 					itemPath = path.join(exampleDir, item); // Get absolute path of file
-					if (fs.statSync(itemPath.replaceAll("\\", "")).isDirectory()){
+					if (fs.statSync(formatBackSlash((itemPath))).isDirectory()){
 						choiceList.push({
 							label: path.basename(item),
 							description: `Go to ${path.basename(item)} examples.`
@@ -338,7 +338,7 @@ function registerCycloneInfo(context, out){
 					}
 					
 					let selectedPath = pathList[choiceList.indexOf(selection)];
-					if (fs.statSync(selectedPath.replaceAll("\\", "")).isDirectory()){
+					if (fs.statSync(formatBackSlash(selectedPath)).isDirectory()){
 						// Show quickPicks for selected folder
 						quickPickDir(selectedPath);	
 						return;
@@ -495,6 +495,16 @@ function registerCycloneInfo(context, out){
 			}));
 		});
 	}
+
+	
+
+function formatBackSlash(content){
+    if (isWindows){
+        return content
+    }
+    return content.replaceAll("\\","")
+}
+
 	
 	function deactivate() {}
 	module.exports = {
@@ -505,4 +515,5 @@ function registerCycloneInfo(context, out){
 
 	// quickPicks.js require the export of extension var to work
 	const {quickPickDir, loadFile} = require("./utils/quickPicks");
+
 	

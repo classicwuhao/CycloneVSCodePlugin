@@ -1,6 +1,8 @@
 const vscode = require('vscode');
 const path = require('path');
-const charToReplace = /["`$]/g
+const {checkOS} = require("./misc");
+const isWindows = checkOS() === "Windows"
+const charToReplace = isWindows ? /["`]/g : /["`$]/g
 
 
 /**

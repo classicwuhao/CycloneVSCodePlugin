@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const os = require('os');
-
+const isWindows = checkOS() === "Windows"
+const charToReplace = isWindows ? /["`]/g : /["`$]/g
 /**
 * 
 * @param {string} message Message to be display

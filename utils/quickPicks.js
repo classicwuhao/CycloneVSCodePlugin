@@ -1,11 +1,20 @@
+
 const vscode = require('vscode');
 const fs = require("fs");
 const path = require('path');
 
 const {extension} =  require("./../extension");
-
+const {checkOS} = require("./misc");
 const lib_path = path.join(extension.extensionPath, "Cyclone");
 
+const isWindows = checkOS() === "Windows"
+
+function formatBackSlash(content){
+    if (isWindows){
+        return content
+    }
+    return content.replaceAll("\\","")
+}
 
 /**
 * Display in the quick picks the content of the selected folder
@@ -25,13 +34,13 @@ function quickPickDir(dirPath){
     
     let itemPath = '';
     
-    fs.readdirSync(dirPath.replaceAll("\\", "")).forEach(item => {
+    fs.readdirSync(formatBackSlash(dirPath)).forEach(item => {
         // Do not display 'trace/' folder 
         if (item === "trace"){
             return;
         }
         itemPath = path.join(dirPath, item)
-        if (fs.statSync(itemPath.replaceAll("\\", "")).isDirectory()){
+        if (fs.statSync(formatBackSlash(itemPath)).isDirectory()){
             choiceList.push({
                 label: path.basename(item),
                 description: "Go to "+path.basename(item)+" examples."
@@ -58,7 +67,7 @@ function quickPickDir(dirPath){
         }
         
         let selectedPath = pathList[choiceList.indexOf(selection)];
-        if (fs.statSync(selectedPath.replaceAll("\\", "")).isDirectory()){
+        if (fs.statSync(formatBackSlash(selectedPath)).isDirectory()){
             // Show quickPicks for selected folder
             quickPickDir(selectedPath);	
             return;
@@ -72,8 +81,8 @@ function quickPickDir(dirPath){
 * @param {string} filePath path of the file to be loaded
 */
 function loadFile(filePath){
-    if (fs.existsSync(filePath.replaceAll("\\", ""))) {
-        const openPath = vscode.Uri.file(filePath.replaceAll("\\", ""));
+    if (fs.existsSync(formatBackSlash(filePath))) {
+        const openPath = vscode.Uri.file(formatBackSlash(filePath));
         vscode.workspace.openTextDocument(openPath).then(doc => {
             vscode.window.showTextDocument(doc);
         });

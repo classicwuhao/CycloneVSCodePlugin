@@ -1,13 +1,23 @@
 const vscode = require('vscode');
 const fs = require("fs");
 
+const {checkOS} = require("./misc");
+const isWindows = checkOS() === "Windows"
+
+function formatBackSlash(content){
+    if (isWindows){
+        return content
+    }
+    return content.replaceAll("\\","")
+}
+
 /**
 * Modify the file to output png file.
 * @param {string} filePath 
 * @returns True if option-trace is set to 'true' in the file
 */
 function modifyForPngTrace(filePath){
-    var fileText = fs.readFileSync(filePath.replaceAll("\\", "")).toString();
+    var fileText = fs.readFileSync(formatBackSlash(filePath)).toString();
     // Remove all white spaces for the test
     let testText = fileText.replace(/\s/g,'')
     if (!testText.includes('option-trace=true;')){
@@ -20,7 +30,7 @@ function modifyForPngTrace(filePath){
     var text = data.join("\n");
     
     // Need to sync to avoid overlap if user check the spec twice.
-    fs.writeFileSync(filePath.replaceAll("\\", ""), text);
+    fs.writeFileSync(formatBackSlash(filePath), text);
     return true;
 }
 
@@ -29,7 +39,7 @@ function modifyForPngTrace(filePath){
 * @param {string} filePath  
 */
 function rollbackFile(filePath){
-    var data = fs.readFileSync(filePath.replaceAll("\\", "")).toString().split("\n");
+    var data = fs.readFileSync(formatBackSlash(filePath)).toString().split("\n");
     // Remove previously added option
     if (data[0].includes('option-output = "dot";')){
         data.shift();
@@ -37,7 +47,7 @@ function rollbackFile(filePath){
     
     var text = data.join("\n");
     // Need to sync to avoid overlap if user check the spec twice.
-    fs.writeFileSync(filePath.replaceAll("\\", ""), text);
+    fs.writeFileSync(formatBackSlash(filePath), text);
 }
 
 module.exports = {
