@@ -28,35 +28,32 @@ This plugin adds support for the cyclone specification language for graph-based 
 
 
 ## Get started
-
-A simple walkthrough to display basic usage of cyclone. 
+Cyclone VS Code Extension Features:
 
 ### Load example
-Open a new file and right click to open menu. Then in **Cyclone** menu, click on **Load example** and select ``chapter2`` then ``Counter.cyclone``.
+Open a new file and right click to open menu. Then in **Cyclone** menu, click on **Load example** and select a sample spec. For example, choose ``chapter2`` -> ``Counter.cyclone``.
 ![](resources/walkthrough/load.png)
            
 ### Check a spec
-Now that you have opened the example, add the following line ``'option-trace=true;'`` and click on **Check This Cyclone Spec** in **Cyclone** menu.  
-You can also click the launch button.
+Open a Cyclone spec, add the following line ``'option-trace=true;'`` and click on **Check This Cyclone Spec** in **Cyclone** menu. You can also click the launch icon.
 ![](resources/walkthrough/check.png)
             
 ### Show the trace
-Once the check is done, open a terminal and go to **Output** (1) -> **Cyclone** (2) to get details on the check. Then in **Cyclone** menu click on **Show Trace File** (3).   
-You can also click on the document button.
+Once the check is done, open a terminal and go to **Output** (1) -> **Cyclone** (2) to get results about current check. In **Cyclone** menu, click **Show Trace File** (3). 
+You can also click on the document icon.
 ![](resources/walkthrough/showTrace.png)
 
 ### Change settings
-The trace opened isn't very handy, let's generate an image based trace instead. First in **Cyclone** menu click on **settings** (or on the gear button). In the settings menu check ``Generate Graphic Trace``.  
-You could also simply click on the arrows button to change the settings. 
-### **Please note that you will need Graphviz installed** 
+To generate picture based trace file. First in **Cyclone** menu click on **settings** (or on the gear icon). In the settings menu tick ``Generate Graphic Trace``.  
+You could also simply click the arrows icon to change the settings. 
+### **Please note that you will need to install Graphviz** 
 ![](resources/walkthrough/settings.png)
             
 ### Show image based trace
-Come back to your Counter file and **check** the spec again. Once finished, in **Cyclone** menu click on **Show Trace (Graphic)**.  
+Once a picture-based trace is finished, click the **Cyclone** menu and choose **Show Trace (Graphic)**.  
 You can also click on the second document button.
 ![](resources/walkthrough/showGraphicTrace.png)
           
 ### Clean trace files
-To avoid deleting trace files by hand, you can click **Clean Trace** or on $(trash) in **Cyclone** menu.   
-You can also click on the bin button or on the flame button but this  last one will delete all traces from all cyclone files in the same directory.
+You can choose **Clean Trace** in the **Cyclone** menu to delete trace files from last check. You can also click the bin icon. Click the flame icon to delete all traces from previous checks.
 ![](resources/walkthrough/clean.png)
