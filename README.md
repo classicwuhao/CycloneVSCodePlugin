@@ -1,9 +1,8 @@
 # Cyclone VS Code Extension
 
-This VS code extension adds support for the Cyclone specification language. Cyclone is a new specification language for verifying/testing graph-based structures. Unlike other formal methods tools, Cyclone uses simple notations and allows users to construct verification tasks by building graphs. Cyclone promotes the idea of think in graph, and makes verification tasks easy to be understood/visualised and learn for those who do not have verification background. Click here to learn more about cyclone.
+This VS code extension adds support for the Cyclone specification language. Cyclone is a new specification language for verifying/testing graph-based structures. Unlike other formal methods tools, Cyclone uses simple notations and allows users to construct verification tasks by building graphs. Cyclone promotes the idea of think in graph, and makes verification tasks easy to be understood or visualised for those who do not have verification background. Click here to learn more about Cyclone.
 
 ## Features
-
 - Support Cyclone syntax and semantics
 - Highlight syntax errors.
 - Running Cyclone verification tasks within VS code editor.
