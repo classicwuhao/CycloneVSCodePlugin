@@ -1,6 +1,6 @@
-# Cyclone plugin for Visual Studio Code
+# Cyclone VS Code Extension
 
-This plugin adds support for the cyclone specification language for graph-based structures. Cyclone is a new specification language for verifying/testing graph-based structures. Unlike other formal methods tools, Cyclone uses simple notations and allows users to construct verification tasks by building graphs. Cyclone promotes the idea of think in graph, and makes verification tasks easy to be understood/visualised and learn for those who do not have verification background. Click here to learn more about cyclone.
+This VS code extension adds support for the Cyclone specification language. Cyclone is a new specification language for verifying/testing graph-based structures. Unlike other formal methods tools, Cyclone uses simple notations and allows users to construct verification tasks by building graphs. Cyclone promotes the idea of think in graph, and makes verification tasks easy to be understood/visualised and learn for those who do not have verification background. Click here to learn more about cyclone.
 
 ## Features
 
@@ -11,26 +11,27 @@ This plugin adds support for the cyclone specification language for graph-based 
 - Cyclone specifications examples
 
 ## Installation
+0. Make sure you have `java` installed first.
 1. If your processor architecture is x86_64, download `Cyclone-x64.vsix` file from this repo. If your processor architecture is ARM (Macbook M1/M2 for example) download `Cyclone-ARM.vsix` file from this repo.
 2. Open VSCode.
-3. Open "Extensions" panel (CTRL + SHIFT + X).
-4. Click on "..." button.
-5. Choose "Install from VSIX..." command.
+3. Open `Extensions` panel (CTRL + SHIFT + X).
+4. Click on `...` button.
+5. Choose `Install from VSIX...` command.
 6. Pick `Cyclone-x64.vsix` or `Cyclone-ARM.vsix` file, depending on your architecture (see **1.**) and confirm.
 7. Wait until a notification appears.
-8. Click on "Reload now" button.
+8. Click on `Reload now` button.
 9. Open any .cyclone file.
 10. Right click your source code editor and choose menu `Cyclone -> Check This Cyclone Spec.`
-11. Open "Output" panel.
-12. Open "Cyclone" channel.
-13. Output should be there.
+11. Open `Output` panel.
+12. Open `Cyclone` channel.
+13. Results are shown in the `Cyclone` channel.
 
 
 
 ## Get started
 Cyclone VS Code Extension Features:
 
-### Load example
+### Load a sample Cyclone spec
 Open a new file and right click to open menu. Then in **Cyclone** menu, click on **Load example** and select a sample spec. For example, choose ``chapter2`` -> ``Counter.cyclone``.
 ![](resources/walkthrough/load.png)
            
