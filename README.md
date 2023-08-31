@@ -4,11 +4,12 @@ This VS code extension adds support for the Cyclone specification language. Cycl
 
 ## Features
 
-- Cyclone syntax and semantic highlights.
-- Running cyclone checker on cyclone specifications.
-- Trace files display (text and image based)
-- Time out settings
-- Cyclone specifications examples
+- Support Cyclone syntax and semantics
+- Highlight syntax errors.
+- Running Cyclone verification tasks within VS code editor.
+- Display trace files (text and image based).
+- Time out settings.
+- Sample Cyclone specifications.
 
 ## Installation
 0. Make sure you have `java` installed first.
