@@ -38,6 +38,6 @@
                 S2^{1} && S3^{1} && 
                 S4^{1} && S5^{1} && 
                 S6^{1} ) 
-        reach (S0,S1,S2,S3,S4,S5,S6) //any node could be a terminating node.
+        reach (S0,S1,S2,S3,S4,S5,S6) //path could end at any one of the nodes.
     }
  }

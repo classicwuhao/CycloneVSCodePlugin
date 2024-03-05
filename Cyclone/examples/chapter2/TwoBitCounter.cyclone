@@ -10,12 +10,12 @@
     /** 
      * R: l'=(l!=r) /\ r'=~r
      */
- 	normal start state S{
+ 	normal start node S{
         l = (l!=r);
         r = !r;
     }
 
- 	trans { S -> S }
+ 	edge { S -> S }
 
  	/*
  	 * Use invariant to check the following LTL formula

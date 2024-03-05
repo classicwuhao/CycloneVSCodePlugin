@@ -73,7 +73,7 @@ machine EinsteinRiddle{
 		enum {English, Sweedish, Danish, Norwegian, German} Nationality;
 	};
 
-	start normal state S{
+	start node S{
 
 		/* Each house has a different color */
 		HouseA.Color != HouseB.Color;
@@ -137,7 +137,7 @@ machine EinsteinRiddle{
 
 	}
 
-	final normal state F{
+	final node F{
 		//clue 1
 		(HouseA.Nationality==#English && HouseA.Color==#Red) || 
 		(HouseB.Nationality==#English && HouseB.Color==#Red) ||

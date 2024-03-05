@@ -21,7 +21,7 @@ machine DefuseBomb{
     /*
      * at the beginning, both of our containers are empty.
      **/
-    start normal state Start{
+    start normal node Start{
         jug1=0;
         jug2=0;
         amount=0;
@@ -30,7 +30,7 @@ machine DefuseBomb{
     /*
      * Pour water from jug2 (5L) to jug1 (3L)
      */
-    normal state Jug2ToJug1{
+    normal node Jug2ToJug1{
         // create a fresh variable here for computing the amount of water we can pour
         fresh(amount); 
 
@@ -45,7 +45,7 @@ machine DefuseBomb{
     /*
      * Pour water from jug1 (3L) to jug2 (5L)
      */
-    normal state Jug1ToJug2{
+    normal node Jug1ToJug2{
         // create a fresh variable here for computing the amount of water we can pour    
         fresh(amount); 
 
@@ -60,41 +60,41 @@ machine DefuseBomb{
     /*
      * Pour away the water in jug1 (3L) 
      */
-    normal state EmptyJug1{
+    normal node EmptyJug1{
         jug1 = 0;
     }
 
     /*
      * Pour away the water in jug2 (5L) 
      */
-    normal state EmptyJug2{
+    normal node EmptyJug2{
         jug2 = 0;
     }
 
     /*
      * Fill jug1 (3L) from tap.
      */
-    normal state FillJug1{
+    normal node FillJug1{
         jug1 = 3;
     }
 
     /*
      * Fill jug2 (5L) from tap.
      */
-    normal state FillJug2{
+    normal node FillJug2{
         jug2 = 5;
     }
 
     /*
      * all possible actions.
      **/
-    trans {Start -> +}
-    trans {Jug2ToJug1 -> +}
-    trans {Jug1ToJug2 -> +}
-    trans {EmptyJug1 -> +}
-    trans {EmptyJug2 -> +}
-    trans {FillJug1 -> +}
-    trans {FillJug2 -> +}
+    edge {Start -> +}
+    edge {Jug2ToJug1 -> +}
+    edge {Jug1ToJug2 -> +}
+    edge {EmptyJug1 -> +}
+    edge {EmptyJug2 -> +}
+    edge {FillJug1 -> +}
+    edge {FillJug2 -> +}
 
     goal{
 

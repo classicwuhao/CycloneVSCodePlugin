@@ -31,33 +31,33 @@ machine CoffeeCan{
 		int black where black >=0;
 	};
 
-	abstract start state Pick{}
+	abstract start node Pick{}
 
-	normal state SameColorBlack{
+	normal node SameColorBlack{
 		Can.black--;
 	}
 
-	normal state SameColorWhite{
+	normal node SameColorWhite{
 		Can.white-=2;
 		Can.black++;
 	}
 
-	normal state DiffColor{
+	normal node DiffColor{
 		Can.black--;
 	}
+	
+	abstract final node T{}
 
-	abstract final state T{}
-
-	trans { Pick -> SameColorBlack }
-	trans { Pick -> SameColorWhite }
-	trans { Pick -> DiffColor }
-	trans { SameColorWhite -> T where Can.white+Can.black==1;}
-	trans { SameColorWhite -> Pick }
-	trans { SameColorBlack -> T where Can.white+Can.black==1;}
-	trans { SameColorBlack -> Pick }
-	trans { DiffColor -> T where Can.white+Can.black==1;}
-	trans { DiffColor -> Pick }
-
+	edge { Pick -> SameColorBlack }
+	edge { Pick -> SameColorWhite }
+	edge { Pick -> DiffColor }
+	edge { SameColorWhite -> T where Can.white+Can.black==1;}
+	edge { SameColorWhite -> Pick }
+	edge { SameColorBlack -> T where Can.white+Can.black==1;}
+	edge { SameColorBlack -> Pick }
+	edge { DiffColor -> T where Can.white+Can.black==1;}
+	edge { DiffColor -> Pick }
+	
 	goal{
 		/**
 		 * Prove the following hypothesis.

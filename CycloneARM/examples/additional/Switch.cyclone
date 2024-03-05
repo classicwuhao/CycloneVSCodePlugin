@@ -18,36 +18,36 @@ machine Switch{
 	int signal=2;
 	int switch=signal;
 	
-	abstract start state S{}
+	abstract start node S{}
 
-	normal final state On {
+	normal final node On {
 		button=#set;
 		switch=1;
 	}
 
-	normal final state Off{
+	normal final node Off{
 		button=#reset;
 		switch=0;
 	}
 
-	normal final state ThirdSignal{
+	normal final node ThirdSignal{
 		button=#unpressed;
 		switch=signal;
 	}
 
-	trans { S -> On where button==#set;}
-	trans { S -> Off where button==#reset;}
-	trans { S -> ThirdSignal where button==#unpressed;}
+	edge { S -> On where button==#set;}
+	edge { S -> Off where button==#reset;}
+	edge { S -> ThirdSignal where button==#unpressed;}
 
-	trans { Off -> On }
-	trans { Off -> Off }
+	edge { Off -> On }
+	edge { Off -> Off }
 
-	trans { On -> Off }
-	trans { On -> On }
+	edge { On -> Off }
+	edge { On -> On }
 
-	trans {ThirdSignal -> ThirdSignal }
-	trans {ThirdSignal -> On }
-	trans {ThirdSignal -> Off }
+	edge {ThirdSignal -> ThirdSignal }
+	edge {ThirdSignal -> On }
+	edge {ThirdSignal -> Off }
 
 	goal{
 		
@@ -62,8 +62,7 @@ machine Switch{
 
 		/* R3: make sure a sequence covering all possible states of the switch. */
 		let state_coverage = (On && Off && ThirdSignal);
-
-
+		
 		check for 3 condition (state_coverage)
 	}
 }
