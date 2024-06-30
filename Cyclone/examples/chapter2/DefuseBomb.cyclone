@@ -9,7 +9,7 @@
  * by placing a 4 gallon jug of water on a set of scales.
  */
 option-trace=true;
-machine DefuseBomb{
+graph DefuseBomb{
     
     /* two containers: 3L and 5L */
     int jug1 where jug1>=0 && jug1<=3; // during ANY computation jug1 must not be underflow or overflow.

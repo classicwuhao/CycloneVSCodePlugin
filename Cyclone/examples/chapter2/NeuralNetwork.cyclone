@@ -3,7 +3,7 @@
  */
 
 option-trace=true;
-machine TinyNeuralNetwork{
+graph TinyNeuralNetwork{
 	/* input */
 	real x0=1;
 	real x1 where x1>=0 && x1<=1;

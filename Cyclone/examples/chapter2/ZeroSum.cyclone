@@ -5,7 +5,7 @@
  * player two wins the game, increase his stake by 1 otherwise decrease his stake by 1.
  * The invariant: winer' stake + loser's stake must be equal to 0.
  */
-machine zerosum {
+graph zerosum {
 
 	int stake1; //player1's stake
 	int stake2; //player2's stake

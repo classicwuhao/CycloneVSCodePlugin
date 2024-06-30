@@ -2,7 +2,7 @@
  * Two bit counter
  */
  option-trace=true;
- machine TwoBitCounterI{
+ graph TwoBitCounterI{
  	bool l;
  	bool r;
 

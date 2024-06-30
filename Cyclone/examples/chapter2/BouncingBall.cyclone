@@ -3,7 +3,7 @@
  */
 
 option-trace=true;
-machine Bouncing_Ball_v1{
+graph Bouncing_Ball_v1{
     real x where x>=0; //position 
     real v; //velocity
     real t where t>=0; //time

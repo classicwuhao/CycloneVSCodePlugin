@@ -5,7 +5,7 @@
  * decrement the counter.
  * reset the counter.
  */
-  machine CountingMachine { 
+  graph CountingMachine { 
       int  c;
       start normal node  R {c=0;} 
       normal node  I {c=c+1;} 
