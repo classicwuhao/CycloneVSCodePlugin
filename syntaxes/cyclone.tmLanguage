@@ -71,7 +71,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(abstract|at|bool|char|enum|final|int|label|record|let|normal|fresh|on|prev|real|start|string|where|with|initial|option)\b</string>
+			<string>\b(abstract|at|bool|char|enum|final|bv|int|label|record|let|normal|fresh|on|prev|real|start|string|where|with|initial|option)\b</string>
 			<key>name</key>
 			<string>keyword.cyclone.other</string>
 		</dict>
@@ -101,7 +101,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(<<|>>|&&|\|\||!|\^\|\=\>)</string>
+			<string>(<<|>>|&&|\|\||!|\^\|\=\>|&|\|)</string>
 			<key>name</key>
 			<string>keyword.cyclone.operator.logical</string>
 		</dict>
