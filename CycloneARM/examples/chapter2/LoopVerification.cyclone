@@ -2,7 +2,7 @@
  * verify a loop
  */
 
-machine verify_loop{
+graph verify_loop{
 	int i where i >=0;
 	int z;
 	int x;

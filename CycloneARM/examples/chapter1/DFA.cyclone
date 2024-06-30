@@ -6,7 +6,7 @@
  * 
  */
 
- machine M{
+ graph M{
 
     abstract start node S{}
     abstract final node q1{}
