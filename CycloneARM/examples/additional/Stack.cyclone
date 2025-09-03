@@ -1,0 +1,42 @@
+/**
+ * A stack example using bit vectors: 
+ * push 1 onto the stack, and pop 1 off from the stack.
+ */
+option-trace=true;
+option-bvdisplay='b'; //display bit vector in binary format.
+
+graph Stack{
+    /* stack max size */
+    const int MAX=10;
+    /* our stack */
+    bv[MAX] stack;
+    const bv[MAX] EMPTY=0b0;
+    const bv[MAX] FULL=~EMPTY;
+    int size=0;
+
+    start final node Push{
+        stack = (stack << 0b1)+0b1;
+        size++;
+    }
+
+    final node Pop{
+        stack = (stack - 0b1)>>0b1;
+        size--;
+    }
+
+    edge { Push -> Push where stack !=FULL;}
+    edge { Push -> Pop where stack !=EMPTY;}
+    edge { Pop -> Push where stack !=FULL;}
+    edge { Pop -> Pop where stack !=EMPTY;}
+
+    /* prove our stack can never be overflow or underflow */
+    invariant safety { size>=0 && size<=MAX;}
+
+    goal{
+        /* stack is initially empty. */
+        assert (initial(stack)==EMPTY);
+
+        /* bounded checking upto 11 push(es)&pop(s) */
+        check upto 10
+    }
+}
